@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: light;
   --bg: #f5f7fb;
   --surface: #ffffff;
@@ -315,6 +315,75 @@ pre {
   background: #fbfcfe;
 }
 
+.submission-history {
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.history-head h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.history-head p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.submission-list {
+  max-height: 260px;
+  overflow: auto;
+}
+
+.submission-list > .result-empty {
+  padding: 12px;
+}
+
+.submission-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  text-align: left;
+}
+
+.submission-item:hover {
+  background: #f8fafc;
+}
+
+.submission-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.submission-title strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.submission-meta {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .result-empty {
   color: var(--muted);
 }
@@ -493,6 +562,66 @@ label {
   box-shadow: var(--shadow);
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.modal {
+  width: min(900px, 100%);
+  max-height: min(760px, calc(100vh - 36px));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+}
+
+.modal-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.modal-head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.modal-body {
+  overflow: auto;
+  padding: 14px 16px 16px;
+}
+
+.modal-section + .modal-section {
+  margin-top: 14px;
+}
+
+.modal-section h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.submission-code {
+  background: var(--code-bg);
+  color: var(--code-fg);
+}
+
 @media (max-width: 1280px) {
   .layout {
     grid-template-columns: 250px minmax(0, 1fr);
@@ -513,7 +642,9 @@ label {
   .topbar,
   .problem-header,
   .editor-toolbar,
-  .result-summary {
+  .result-summary,
+  .history-head,
+  .modal-head {
     align-items: stretch;
     flex-direction: column;
   }

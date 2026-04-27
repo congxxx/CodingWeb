@@ -1,5 +1,6 @@
-const state = {
+﻿const state = {
   problems: [],
+  submissions: [],
   currentProblem: null,
   editableProblem: null,
   selectedProblemId: null,
@@ -38,6 +39,13 @@ const els = {
   runBtn: document.querySelector("#runBtn"),
   submitBtn: document.querySelector("#submitBtn"),
   resultPanel: document.querySelector("#resultPanel"),
+  refreshSubmissionsBtn: document.querySelector("#refreshSubmissionsBtn"),
+  submissionList: document.querySelector("#submissionList"),
+  submissionModal: document.querySelector("#submissionModal"),
+  submissionModalTitle: document.querySelector("#submissionModalTitle"),
+  submissionModalMeta: document.querySelector("#submissionModalMeta"),
+  submissionModalBody: document.querySelector("#submissionModalBody"),
+  closeSubmissionModalBtn: document.querySelector("#closeSubmissionModalBtn"),
   problemForm: document.querySelector("#problemForm"),
   formTitle: document.querySelector("#formTitle"),
   deleteProblemBtn: document.querySelector("#deleteProblemBtn"),
@@ -173,6 +181,100 @@ function codeStorageKey(problemId) {
   return `coding-web-code-${problemId}`;
 }
 
+async function loadSubmissions() {
+  const payload = await api("/api/submissions");
+  state.submissions = payload.submissions || [];
+  renderSubmissionList();
+}
+
+function renderSubmissionList() {
+  if (!els.submissionList) {
+    return;
+  }
+
+  if (state.submissions.length === 0) {
+    els.submissionList.innerHTML = '<div class="result-empty">暂无提交记录。运行样例或正式提交后会自动出现。</div>';
+    return;
+  }
+
+  els.submissionList.innerHTML = state.submissions.map((submission) => `
+    <button class="submission-item" type="button" data-id="${escapeHtml(submission.id)}">
+      <span>
+        <span class="submission-title">
+          <strong>${escapeHtml(submission.problemTitle)}</strong>
+          <span class="status ${submission.status}">${statusText[submission.status] || submission.status}</span>
+        </span>
+        <span class="submission-meta">
+          ${escapeHtml(modeText(submission.mode))} · 通过 ${submission.passedCount}/${submission.totalCount} · ${submission.timeUsedMs} ms · ${escapeHtml(formatDateTime(submission.createdAt))}
+        </span>
+      </span>
+      <span class="case-meta">查看</span>
+    </button>
+  `).join("");
+}
+
+async function openSubmissionDetail(id) {
+  const { submission } = await api(`/api/submissions/${encodeURIComponent(id)}`);
+  const problem = state.problems.find((item) => item.id === submission.problemId);
+  const problemTitle = problem ? problem.title : "已删除题目";
+
+  els.submissionModalTitle.textContent = `${problemTitle} · ${modeText(submission.mode)}`;
+  els.submissionModalMeta.textContent = `${statusText[submission.status] || submission.status} · 通过 ${submission.passedCount}/${submission.totalCount} · ${submission.timeUsedMs} ms · ${formatDateTime(submission.createdAt)}`;
+  els.submissionModalBody.innerHTML = renderSubmissionDetail(submission);
+  els.submissionModal.classList.remove("hidden");
+}
+
+function closeSubmissionDetail() {
+  els.submissionModal.classList.add("hidden");
+  els.submissionModalBody.innerHTML = "";
+}
+
+function renderSubmissionDetail(submission) {
+  const rows = (submission.caseResults || []).map((result) => `
+    <div class="case-result">
+      <div class="result-summary">
+        <span class="case-meta">用例 ${result.index}${result.isSample ? " · 样例" : " · 隐藏"} · ${result.timeUsedMs} ms</span>
+        <span class="status ${result.status}">${statusText[result.status] || result.status}</span>
+      </div>
+      ${result.message ? `<pre>${escapeHtml(result.message)}</pre>` : ""}
+      ${result.input ? `<div class="sample-title">输入</div><pre>${escapeHtml(result.input)}</pre>` : ""}
+      ${result.expectedOutput ? `<div class="sample-title">期望输出</div><pre>${escapeHtml(result.expectedOutput)}</pre>` : ""}
+      ${result.actualOutput ? `<div class="sample-title">实际输出</div><pre>${escapeHtml(result.actualOutput)}</pre>` : ""}
+    </div>
+  `).join("");
+
+  return `
+    <div class="modal-section">
+      <h3>判题结果</h3>
+      <div class="result-summary">
+        <span class="status ${submission.status}">${statusText[submission.status] || submission.status}</span>
+        <span class="case-meta">通过 ${submission.passedCount}/${submission.totalCount}</span>
+      </div>
+      ${submission.errorMessage ? `<pre>${escapeHtml(submission.errorMessage)}</pre>` : ""}
+      ${rows || '<div class="result-empty">没有用例详情。</div>'}
+    </div>
+    <div class="modal-section">
+      <h3>提交代码</h3>
+      <pre class="submission-code">${escapeHtml(submission.code)}</pre>
+    </div>
+  `;
+}
+
+function modeText(mode) {
+  return mode === "RUN_SAMPLE" ? "样例运行" : "正式提交";
+}
+
+function formatDateTime(value) {
+  if (!value) {
+    return "";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+  return date.toLocaleString("zh-CN", { hour12: false });
+}
+
 function fillProblemForm(problem) {
   state.editableProblem = JSON.parse(JSON.stringify(problem));
   const isNew = !problem.id;
@@ -305,6 +407,7 @@ async function deleteCurrentProblem() {
   });
   showToast("题目已删除");
   await loadProblems();
+  await loadSubmissions();
 }
 
 async function runJudge(mode) {
@@ -325,6 +428,7 @@ async function runJudge(mode) {
       })
     });
     renderJudgeResult(payload.submission);
+    await loadSubmissions();
   } catch (error) {
     els.resultPanel.innerHTML = `<div class="status RUNTIME_ERROR">请求失败</div><pre>${escapeHtml(error.message)}</pre>`;
   } finally {
@@ -383,6 +487,7 @@ els.problemList.addEventListener("click", (event) => {
 
 els.searchInput.addEventListener("input", renderProblemList);
 els.refreshBtn.addEventListener("click", () => loadProblems().catch((error) => showToast(error.message)));
+els.refreshSubmissionsBtn.addEventListener("click", () => loadSubmissions().catch((error) => showToast(error.message)));
 els.newProblemBtn.addEventListener("click", () => {
   clearProblemView();
   fillProblemForm(createBlankProblem());
@@ -423,8 +528,26 @@ els.testCaseList.addEventListener("click", (event) => {
   state.editableProblem = problem;
   renderTestCaseEditor(problem.testCases);
 });
+els.submissionList.addEventListener("click", (event) => {
+  const button = event.target.closest(".submission-item");
+  if (button) {
+    openSubmissionDetail(button.dataset.id).catch((error) => showToast(error.message));
+  }
+});
+els.closeSubmissionModalBtn.addEventListener("click", closeSubmissionDetail);
+els.submissionModal.addEventListener("click", (event) => {
+  if (event.target === els.submissionModal) {
+    closeSubmissionDetail();
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !els.submissionModal.classList.contains("hidden")) {
+    closeSubmissionDetail();
+  }
+});
 
 loadProblems().catch((error) => {
   showToast(error.message);
   clearProblemView();
 });
+loadSubmissions().catch((error) => showToast(error.message));
