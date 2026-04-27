@@ -4,6 +4,8 @@
   currentProblem: null,
   editableProblem: null,
   selectedProblemId: null,
+  lastSubmission: null,
+  resultCaseIndex: 0,
   running: false
 };
 
@@ -20,8 +22,10 @@ const statusText = {
 };
 
 const els = {
+  layout: document.querySelector(".layout"),
   refreshBtn: document.querySelector("#refreshBtn"),
   restoreSeedBtn: document.querySelector("#restoreSeedBtn"),
+  toggleManagerBtn: document.querySelector("#toggleManagerBtn"),
   newProblemBtn: document.querySelector("#newProblemBtn"),
   searchInput: document.querySelector("#searchInput"),
   problemList: document.querySelector("#problemList"),
@@ -50,6 +54,7 @@ const els = {
   problemForm: document.querySelector("#problemForm"),
   formTitle: document.querySelector("#formTitle"),
   deleteProblemBtn: document.querySelector("#deleteProblemBtn"),
+  closeManagerBtn: document.querySelector("#closeManagerBtn"),
   formProblemTitle: document.querySelector("#formProblemTitle"),
   formDifficulty: document.querySelector("#formDifficulty"),
   formTags: document.querySelector("#formTags"),
@@ -103,6 +108,24 @@ async function loadProblems(preferredId = state.selectedProblemId) {
     ? preferredId
     : state.problems[0].id;
   await selectProblem(nextId);
+}
+
+function openManager() {
+  els.layout.classList.remove("manager-collapsed");
+  els.toggleManagerBtn.textContent = "收起管理";
+}
+
+function closeManager() {
+  els.layout.classList.add("manager-collapsed");
+  els.toggleManagerBtn.textContent = "题目管理";
+}
+
+function toggleManager() {
+  if (els.layout.classList.contains("manager-collapsed")) {
+    openManager();
+  } else {
+    closeManager();
+  }
 }
 
 async function restoreSeedProblem() {
@@ -176,6 +199,8 @@ function renderProblemView() {
 
   const savedCode = localStorage.getItem(codeStorageKey(problem.id));
   els.codeEditor.value = savedCode || problem.javaTemplate || "";
+  state.lastSubmission = null;
+  state.resultCaseIndex = 0;
   els.resultPanel.innerHTML = '<div class="result-empty">运行样例或提交后，结果会显示在这里。</div>';
 }
 
@@ -183,6 +208,8 @@ function clearProblemView() {
   state.currentProblem = null;
   state.editableProblem = null;
   state.selectedProblemId = null;
+  state.lastSubmission = null;
+  state.resultCaseIndex = 0;
   els.emptyState.classList.remove("hidden");
   els.problemPanel.classList.add("hidden");
   els.resultPanel.innerHTML = "";
@@ -403,6 +430,7 @@ async function saveProblem(event) {
   });
   showToast("题目已保存");
   await loadProblems(payload.problem.id);
+  closeManager();
 }
 
 async function deleteCurrentProblem() {
@@ -438,6 +466,7 @@ async function runJudge(mode) {
         code: els.codeEditor.value
       })
     });
+    state.resultCaseIndex = 0;
     renderJudgeResult(payload.submission);
     await loadSubmissions();
   } catch (error) {
@@ -455,18 +484,25 @@ function setJudgeButtons(disabled) {
 }
 
 function renderJudgeResult(submission) {
-  const rows = (submission.caseResults || []).map((result) => `
+  state.lastSubmission = submission;
+  const results = submission.caseResults || [];
+  if (state.resultCaseIndex >= results.length) {
+    state.resultCaseIndex = Math.max(results.length - 1, 0);
+  }
+  const currentResult = results[state.resultCaseIndex];
+  const caseBlock = currentResult ? `
     <div class="case-result">
       <div class="result-summary">
-        <span class="case-meta">用例 ${result.index}${result.isSample ? " · 样例" : " · 隐藏"} · ${result.timeUsedMs} ms</span>
-        <span class="status ${result.status}">${statusText[result.status] || result.status}</span>
+        <span class="case-meta">用例 ${currentResult.index}${currentResult.isSample ? " · 样例" : " · 隐藏"} · ${currentResult.timeUsedMs} ms</span>
+        <span class="status ${currentResult.status}">${statusText[currentResult.status] || currentResult.status}</span>
       </div>
-      ${result.message ? `<pre>${escapeHtml(result.message)}</pre>` : ""}
-      ${result.input ? `<div class="sample-title">输入</div><pre>${escapeHtml(result.input)}</pre>` : ""}
-      ${result.expectedOutput ? `<div class="sample-title">期望输出</div><pre>${escapeHtml(result.expectedOutput)}</pre>` : ""}
-      ${result.actualOutput ? `<div class="sample-title">实际输出</div><pre>${escapeHtml(result.actualOutput)}</pre>` : ""}
+      ${currentResult.message ? `<pre>${escapeHtml(currentResult.message)}</pre>` : ""}
+      ${currentResult.input ? `<div class="sample-title">输入</div><pre>${escapeHtml(currentResult.input)}</pre>` : ""}
+      ${currentResult.expectedOutput ? `<div class="sample-title">期望输出</div><pre>${escapeHtml(currentResult.expectedOutput)}</pre>` : ""}
+      ${currentResult.actualOutput ? `<div class="sample-title">实际输出</div><pre>${escapeHtml(currentResult.actualOutput)}</pre>` : ""}
     </div>
-  `).join("");
+  ` : '<div class="result-empty">没有用例详情。</div>';
+  const hasMultipleCases = results.length > 1;
 
   els.resultPanel.innerHTML = `
     <div class="result-summary">
@@ -477,8 +513,30 @@ function renderJudgeResult(submission) {
       <span class="case-meta">${submission.mode === "RUN_SAMPLE" ? "样例运行" : "正式提交"}</span>
     </div>
     ${submission.errorMessage ? `<pre>${escapeHtml(submission.errorMessage)}</pre>` : ""}
-    ${rows}
+    ${hasMultipleCases ? `
+      <div class="result-nav">
+        <span class="case-meta">当前 ${state.resultCaseIndex + 1}/${results.length}</span>
+        <div class="button-row">
+          <button class="ghost-btn" type="button" data-result-action="prev" ${state.resultCaseIndex === 0 ? "disabled" : ""}>上一个</button>
+          <button class="ghost-btn" type="button" data-result-action="next" ${state.resultCaseIndex >= results.length - 1 ? "disabled" : ""}>下一个</button>
+        </div>
+      </div>
+    ` : ""}
+    ${caseBlock}
   `;
+}
+
+function switchResultCase(direction) {
+  if (!state.lastSubmission) {
+    return;
+  }
+  const results = state.lastSubmission.caseResults || [];
+  if (direction === "next") {
+    state.resultCaseIndex = Math.min(state.resultCaseIndex + 1, results.length - 1);
+  } else {
+    state.resultCaseIndex = Math.max(state.resultCaseIndex - 1, 0);
+  }
+  renderJudgeResult(state.lastSubmission);
 }
 
 function showToast(message) {
@@ -500,9 +558,11 @@ els.searchInput.addEventListener("input", renderProblemList);
 els.refreshBtn.addEventListener("click", () => loadProblems().catch((error) => showToast(error.message)));
 els.restoreSeedBtn.addEventListener("click", () => restoreSeedProblem().catch((error) => showToast(error.message)));
 els.refreshSubmissionsBtn.addEventListener("click", () => loadSubmissions().catch((error) => showToast(error.message)));
+els.toggleManagerBtn.addEventListener("click", toggleManager);
 els.newProblemBtn.addEventListener("click", () => {
   clearProblemView();
   fillProblemForm(createBlankProblem());
+  openManager();
 });
 els.resetCodeBtn.addEventListener("click", () => {
   if (state.currentProblem) {
@@ -517,8 +577,15 @@ els.codeEditor.addEventListener("input", () => {
 });
 els.runBtn.addEventListener("click", () => runJudge("RUN_SAMPLE"));
 els.submitBtn.addEventListener("click", () => runJudge("SUBMIT"));
+els.resultPanel.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-result-action]");
+  if (button) {
+    switchResultCase(button.dataset.resultAction);
+  }
+});
 els.problemForm.addEventListener("submit", saveProblem);
 els.deleteProblemBtn.addEventListener("click", () => deleteCurrentProblem().catch((error) => showToast(error.message)));
+els.closeManagerBtn.addEventListener("click", closeManager);
 els.addCaseBtn.addEventListener("click", () => {
   const problem = readProblemForm();
   problem.testCases.push({
@@ -563,3 +630,4 @@ loadProblems().catch((error) => {
   clearProblemView();
 });
 loadSubmissions().catch((error) => showToast(error.message));
+closeManager();

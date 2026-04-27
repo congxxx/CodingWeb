@@ -87,19 +87,32 @@ button:disabled {
 .layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr) 390px;
-  min-height: calc(100vh - 65px);
+  height: calc(100vh - 65px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.layout.manager-collapsed {
+  grid-template-columns: 280px minmax(0, 1fr) 0;
 }
 
 .sidebar,
 .manager {
+  min-height: 0;
   border-right: 1px solid var(--line);
   background: var(--surface);
+  overflow: auto;
 }
 
 .manager {
   border-right: 0;
   border-left: 1px solid var(--line);
-  overflow: auto;
+}
+
+.layout.manager-collapsed .manager {
+  border-left: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .side-head {
@@ -188,6 +201,7 @@ textarea:focus {
 
 .workspace {
   min-width: 0;
+  min-height: 0;
   padding: 18px;
   overflow: auto;
 }
@@ -419,6 +433,18 @@ pre {
   margin-bottom: 10px;
 }
 
+.result-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.result-nav .button-row {
+  flex-wrap: nowrap;
+}
+
 .case-result {
   border-top: 1px solid var(--line);
   padding-top: 10px;
@@ -436,6 +462,7 @@ pre {
 
 .manager-head {
   display: flex;
+  align-items: start;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
@@ -444,6 +471,12 @@ pre {
 .manager-head p {
   margin: 4px 0 0;
   color: var(--muted);
+}
+
+.manager-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 label {
@@ -627,10 +660,24 @@ label {
     grid-template-columns: 250px minmax(0, 1fr);
   }
 
+  .layout.manager-collapsed {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .layout {
+    height: auto;
+    min-height: calc(100vh - 65px);
+    overflow: visible;
+  }
+
   .manager {
     grid-column: 1 / -1;
     border-left: 0;
     border-top: 1px solid var(--line);
+  }
+
+  .layout.manager-collapsed .manager {
+    display: none;
   }
 
   .manager form {
