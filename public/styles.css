@@ -249,10 +249,14 @@ textarea:focus {
 }
 
 .statement {
+  overflow: hidden;
+}
+
+.tab-page {
   padding: 18px;
 }
 
-.statement section + section {
+.tab-page section + section {
   margin-top: 18px;
 }
 
@@ -265,6 +269,44 @@ textarea:focus {
 .statement p {
   margin: 0;
   white-space: pre-wrap;
+}
+
+.statement-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 10px 0;
+  border-bottom: 1px solid var(--line);
+  background: #fbfcfe;
+}
+
+.tab-btn {
+  position: relative;
+  min-height: 38px;
+  padding: 8px 12px 10px;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.tab-btn:hover {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: #fff;
+  color: var(--text);
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
+  height: 2px;
+  background: var(--primary);
 }
 
 .sample {
@@ -329,17 +371,12 @@ pre {
   background: #fbfcfe;
 }
 
-.submission-history {
-  border-top: 1px solid var(--line);
-  background: #fff;
-}
-
 .history-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px;
+  padding: 0 0 12px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -355,7 +392,7 @@ pre {
 }
 
 .submission-list {
-  max-height: 260px;
+  max-height: none;
   overflow: auto;
 }
 

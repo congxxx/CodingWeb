@@ -4,6 +4,7 @@
   currentProblem: null,
   editableProblem: null,
   selectedProblemId: null,
+  activeInfoTab: "description",
   lastSubmission: null,
   resultCaseIndex: 0,
   running: false
@@ -39,6 +40,10 @@ const els = {
   outputDescription: document.querySelector("#outputDescription"),
   constraints: document.querySelector("#constraints"),
   sampleCases: document.querySelector("#sampleCases"),
+  descriptionTabBtn: document.querySelector("#descriptionTabBtn"),
+  submissionsTabBtn: document.querySelector("#submissionsTabBtn"),
+  descriptionTab: document.querySelector("#descriptionTab"),
+  submissionsTab: document.querySelector("#submissionsTab"),
   codeEditor: document.querySelector("#codeEditor"),
   resetCodeBtn: document.querySelector("#resetCodeBtn"),
   runBtn: document.querySelector("#runBtn"),
@@ -97,6 +102,7 @@ async function loadProblems(preferredId = state.selectedProblemId) {
   const payload = await api("/api/problems");
   state.problems = payload.problems;
   renderProblemList();
+  renderInfoTabs();
 
   if (state.problems.length === 0) {
     clearProblemView();
@@ -149,6 +155,7 @@ async function selectProblem(id) {
   renderProblemList();
   renderProblemView();
   fillProblemForm(state.editableProblem);
+  renderSubmissionList();
 }
 
 function renderProblemList() {
@@ -204,15 +211,33 @@ function renderProblemView() {
   els.resultPanel.innerHTML = '<div class="result-empty">运行样例或提交后，结果会显示在这里。</div>';
 }
 
+function renderInfoTabs() {
+  const isSubmissions = state.activeInfoTab === "submissions";
+  els.descriptionTabBtn.classList.toggle("active", !isSubmissions);
+  els.submissionsTabBtn.classList.toggle("active", isSubmissions);
+  els.descriptionTab.classList.toggle("hidden", isSubmissions);
+  els.submissionsTab.classList.toggle("hidden", !isSubmissions);
+}
+
+function switchInfoTab(tabName) {
+  state.activeInfoTab = tabName === "submissions" ? "submissions" : "description";
+  renderInfoTabs();
+  if (state.activeInfoTab === "submissions") {
+    loadSubmissions().catch((error) => showToast(error.message));
+  }
+}
+
 function clearProblemView() {
   state.currentProblem = null;
   state.editableProblem = null;
   state.selectedProblemId = null;
+  state.activeInfoTab = "description";
   state.lastSubmission = null;
   state.resultCaseIndex = 0;
   els.emptyState.classList.remove("hidden");
   els.problemPanel.classList.add("hidden");
   els.resultPanel.innerHTML = "";
+  renderInfoTabs();
 }
 
 function codeStorageKey(problemId) {
@@ -230,12 +255,16 @@ function renderSubmissionList() {
     return;
   }
 
-  if (state.submissions.length === 0) {
-    els.submissionList.innerHTML = '<div class="result-empty">暂无提交记录。运行样例或正式提交后会自动出现。</div>';
+  const visibleSubmissions = state.selectedProblemId
+    ? state.submissions.filter((submission) => submission.problemId === state.selectedProblemId)
+    : state.submissions;
+
+  if (visibleSubmissions.length === 0) {
+    els.submissionList.innerHTML = '<div class="result-empty">当前题目暂无提交记录。运行样例或正式提交后会自动出现。</div>';
     return;
   }
 
-  els.submissionList.innerHTML = state.submissions.map((submission) => `
+  els.submissionList.innerHTML = visibleSubmissions.map((submission) => `
     <button class="submission-item" type="button" data-id="${escapeHtml(submission.id)}">
       <span>
         <span class="submission-title">
@@ -558,6 +587,8 @@ els.searchInput.addEventListener("input", renderProblemList);
 els.refreshBtn.addEventListener("click", () => loadProblems().catch((error) => showToast(error.message)));
 els.restoreSeedBtn.addEventListener("click", () => restoreSeedProblem().catch((error) => showToast(error.message)));
 els.refreshSubmissionsBtn.addEventListener("click", () => loadSubmissions().catch((error) => showToast(error.message)));
+els.descriptionTabBtn.addEventListener("click", () => switchInfoTab("description"));
+els.submissionsTabBtn.addEventListener("click", () => switchInfoTab("submissions"));
 els.toggleManagerBtn.addEventListener("click", toggleManager);
 els.newProblemBtn.addEventListener("click", () => {
   clearProblemView();

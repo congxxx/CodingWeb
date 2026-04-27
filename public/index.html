@@ -47,26 +47,44 @@
 
           <div class="work-grid">
             <article class="statement">
-              <section>
-                <h3>题目描述</h3>
-                <p id="problemDescription"></p>
-              </section>
-              <section>
-                <h3>输入说明</h3>
-                <p id="inputDescription"></p>
-              </section>
-              <section>
-                <h3>输出说明</h3>
-                <p id="outputDescription"></p>
-              </section>
-              <section>
-                <h3>数据范围</h3>
-                <p id="constraints"></p>
-              </section>
-              <section>
-                <h3>样例</h3>
-                <div id="sampleCases" class="sample-list"></div>
-              </section>
+              <div class="statement-tabs" role="tablist" aria-label="题目信息">
+                <button id="descriptionTabBtn" class="tab-btn active" type="button" data-info-tab="description">题目描述</button>
+                <button id="submissionsTabBtn" class="tab-btn" type="button" data-info-tab="submissions">提交记录</button>
+              </div>
+
+              <div id="descriptionTab" class="tab-page">
+                <section>
+                  <h3>题目描述</h3>
+                  <p id="problemDescription"></p>
+                </section>
+                <section>
+                  <h3>输入说明</h3>
+                  <p id="inputDescription"></p>
+                </section>
+                <section>
+                  <h3>输出说明</h3>
+                  <p id="outputDescription"></p>
+                </section>
+                <section>
+                  <h3>数据范围</h3>
+                  <p id="constraints"></p>
+                </section>
+                <section>
+                  <h3>样例</h3>
+                  <div id="sampleCases" class="sample-list"></div>
+                </section>
+              </div>
+
+              <div id="submissionsTab" class="tab-page hidden">
+                <div class="history-head">
+                  <div>
+                    <h3>提交记录</h3>
+                    <p>这里显示当前题目的最近运行和正式提交。</p>
+                  </div>
+                  <button id="refreshSubmissionsBtn" class="ghost-btn" type="button">刷新记录</button>
+                </div>
+                <div id="submissionList" class="submission-list"></div>
+              </div>
             </article>
 
             <section class="judge-panel">
@@ -80,16 +98,6 @@
               </div>
               <textarea id="codeEditor" class="code-editor" spellcheck="false"></textarea>
               <div id="resultPanel" class="result-panel" aria-live="polite"></div>
-              <div class="submission-history">
-                <div class="history-head">
-                  <div>
-                    <h3>提交记录</h3>
-                    <p>最近的运行和正式提交会显示在这里。</p>
-                  </div>
-                  <button id="refreshSubmissionsBtn" class="ghost-btn" type="button">刷新记录</button>
-                </div>
-                <div id="submissionList" class="submission-list"></div>
-              </div>
             </section>
           </div>
         </div>
