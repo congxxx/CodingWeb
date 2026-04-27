@@ -16,6 +16,7 @@ const SERVER_INFO_FILE = path.join(ROOT_DIR, "tmp", "server.json");
 // 只监听 127.0.0.1，表示当前网站只给本机浏览器访问，适合本地开发。
 const DEFAULT_PORT = Number(process.env.PORT || 3000);
 const HOST = "127.0.0.1";
+const SEED_PROBLEM_ID = "seed-two-sum";
 
 // 给用户提交加上基础限制，避免一段异常代码占满磁盘、内存或输出。
 const MAX_CODE_LENGTH = 120000;
@@ -66,9 +67,9 @@ async function ensureStorage() {
 
 function createSeedProblem() {
   // 内置一道示例题，方便刚启动项目时立刻测试完整做题流程。
-  const now = new Date().toISOString();
+  const now = "2026-04-27T00:00:00.000Z";
   return {
-    id: crypto.randomUUID(),
+    id: SEED_PROBLEM_ID,
     title: "两数之和",
     difficulty: "简单",
     tags: ["数组", "哈希表"],
@@ -107,21 +108,21 @@ function createSeedProblem() {
     memoryLimitMb: 256,
     testCases: [
       {
-        id: crypto.randomUUID(),
+        id: "seed-case-1",
         input: "4 9\n2 7 11 15\n",
         expectedOutput: "0 1\n",
         isSample: true,
         sortOrder: 1
       },
       {
-        id: crypto.randomUUID(),
+        id: "seed-case-2",
         input: "3 6\n3 2 4\n",
         expectedOutput: "1 2\n",
         isSample: true,
         sortOrder: 2
       },
       {
-        id: crypto.randomUUID(),
+        id: "seed-case-3",
         input: "2 6\n3 3\n",
         expectedOutput: "0 1\n",
         isSample: false,
@@ -153,6 +154,22 @@ async function handleApi(req, res, pathname) {
     sendJson(res, 200, {
       problems: db.problems.map((problem) => toProblemListItem(problem))
     });
+    return;
+  }
+
+  if (req.method === "POST" && pathname === "/api/problems/seed") {
+    // 恢复示例题：用户误删示例题后，可以不用手动修改 data/db.json。
+    const db = await readDb();
+    const existing = db.problems.find((problem) => problem.id === SEED_PROBLEM_ID || problem.title === "两数之和");
+    if (existing) {
+      sendJson(res, 200, { problem: toEditableProblem(existing), restored: false });
+      return;
+    }
+
+    const problem = createSeedProblem();
+    db.problems.unshift(problem);
+    await writeDb(db);
+    sendJson(res, 201, { problem: toEditableProblem(problem), restored: true });
     return;
   }
 

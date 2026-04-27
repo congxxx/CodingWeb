@@ -21,6 +21,7 @@ const statusText = {
 
 const els = {
   refreshBtn: document.querySelector("#refreshBtn"),
+  restoreSeedBtn: document.querySelector("#restoreSeedBtn"),
   newProblemBtn: document.querySelector("#newProblemBtn"),
   searchInput: document.querySelector("#searchInput"),
   problemList: document.querySelector("#problemList"),
@@ -102,6 +103,16 @@ async function loadProblems(preferredId = state.selectedProblemId) {
     ? preferredId
     : state.problems[0].id;
   await selectProblem(nextId);
+}
+
+async function restoreSeedProblem() {
+  const payload = await api("/api/problems/seed", {
+    method: "POST",
+    body: JSON.stringify({})
+  });
+
+  showToast(payload.restored ? "示例题已恢复" : "示例题已经存在");
+  await loadProblems(payload.problem.id);
 }
 
 async function selectProblem(id) {
@@ -487,6 +498,7 @@ els.problemList.addEventListener("click", (event) => {
 
 els.searchInput.addEventListener("input", renderProblemList);
 els.refreshBtn.addEventListener("click", () => loadProblems().catch((error) => showToast(error.message)));
+els.restoreSeedBtn.addEventListener("click", () => restoreSeedProblem().catch((error) => showToast(error.message)));
 els.refreshSubmissionsBtn.addEventListener("click", () => loadSubmissions().catch((error) => showToast(error.message)));
 els.newProblemBtn.addEventListener("click", () => {
   clearProblemView();
