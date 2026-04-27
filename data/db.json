@@ -1,0 +1,46 @@
+{
+  "problems": [
+    {
+      "id": "seed-two-sum",
+      "title": "两数之和",
+      "difficulty": "简单",
+      "tags": [
+        "数组",
+        "哈希表"
+      ],
+      "description": "给定一个整数数组 nums 和一个目标值 target，请输出数组中和为 target 的两个元素下标。保证每组数据只有一个答案。",
+      "inputDescription": "第一行输入两个整数 n 和 target。第二行输入 n 个整数，表示数组 nums。",
+      "outputDescription": "输出两个整数，表示满足条件的两个下标，按从小到大输出。",
+      "constraints": "2 <= n <= 10000，-100000 <= nums[i], target <= 100000。",
+      "javaTemplate": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int target = scanner.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) {\n            nums[i] = scanner.nextInt();\n        }\n\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int need = target - nums[i];\n            if (seen.containsKey(need)) {\n                int a = seen.get(need);\n                int b = i;\n                System.out.println(Math.min(a, b) + \" \" + Math.max(a, b));\n                return;\n            }\n            seen.put(nums[i], i);\n        }\n    }\n}",
+      "timeLimitMs": 2000,
+      "memoryLimitMb": 256,
+      "testCases": [
+        {
+          "id": "seed-case-1",
+          "input": "4 9\n2 7 11 15\n",
+          "expectedOutput": "0 1\n",
+          "isSample": true,
+          "sortOrder": 1
+        },
+        {
+          "id": "seed-case-2",
+          "input": "3 6\n3 2 4\n",
+          "expectedOutput": "1 2\n",
+          "isSample": true,
+          "sortOrder": 2
+        },
+        {
+          "id": "seed-case-3",
+          "input": "2 6\n3 3\n",
+          "expectedOutput": "0 1\n",
+          "isSample": false,
+          "sortOrder": 3
+        }
+      ],
+      "createdAt": "2026-04-27T00:00:00.000Z",
+      "updatedAt": "2026-04-27T00:00:00.000Z"
+    }
+  ],
+  "submissions": []
+}

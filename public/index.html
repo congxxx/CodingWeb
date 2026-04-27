@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CodingWeb MVP</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <div class="brand">CodingWeb</div>
+        <div class="subline">Java 自定义刷题 MVP</div>
+      </div>
+      <div class="top-actions">
+        <button id="refreshBtn" class="ghost-btn" type="button">刷新</button>
+        <button id="newProblemBtn" class="primary-btn" type="button">新建题目</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar" aria-label="题目列表">
+        <div class="side-head">
+          <h1>题目</h1>
+          <input id="searchInput" class="search" type="search" placeholder="搜索标题或标签">
+        </div>
+        <div id="problemList" class="problem-list"></div>
+      </aside>
+
+      <section class="workspace">
+        <div id="emptyState" class="empty-state">
+          <h2>选择一道题开始</h2>
+          <p>左侧选择题目，或创建自己的 Java 题目。</p>
+        </div>
+
+        <div id="problemPanel" class="problem-panel hidden">
+          <div class="problem-header">
+            <div>
+              <div id="problemMeta" class="meta"></div>
+              <h2 id="problemTitle"></h2>
+            </div>
+            <div class="limit-line" id="problemLimits"></div>
+          </div>
+
+          <div class="work-grid">
+            <article class="statement">
+              <section>
+                <h3>题目描述</h3>
+                <p id="problemDescription"></p>
+              </section>
+              <section>
+                <h3>输入说明</h3>
+                <p id="inputDescription"></p>
+              </section>
+              <section>
+                <h3>输出说明</h3>
+                <p id="outputDescription"></p>
+              </section>
+              <section>
+                <h3>数据范围</h3>
+                <p id="constraints"></p>
+              </section>
+              <section>
+                <h3>样例</h3>
+                <div id="sampleCases" class="sample-list"></div>
+              </section>
+            </article>
+
+            <section class="judge-panel">
+              <div class="editor-toolbar">
+                <span>Java 代码</span>
+                <div class="button-row">
+                  <button id="resetCodeBtn" class="ghost-btn" type="button">重置</button>
+                  <button id="runBtn" class="ghost-btn" type="button">运行样例</button>
+                  <button id="submitBtn" class="primary-btn" type="button">提交</button>
+                </div>
+              </div>
+              <textarea id="codeEditor" class="code-editor" spellcheck="false"></textarea>
+              <div id="resultPanel" class="result-panel" aria-live="polite"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <aside class="manager" aria-label="题目管理">
+        <form id="problemForm">
+          <div class="manager-head">
+            <div>
+              <h2 id="formTitle">题目管理</h2>
+              <p>编辑后保存即可用于自测。</p>
+            </div>
+            <button id="deleteProblemBtn" class="danger-btn" type="button">删除</button>
+          </div>
+
+          <label>
+            标题
+            <input id="formProblemTitle" name="title" required>
+          </label>
+
+          <div class="form-row">
+            <label>
+              难度
+              <select id="formDifficulty" name="difficulty">
+                <option>简单</option>
+                <option>中等</option>
+                <option>困难</option>
+              </select>
+            </label>
+            <label>
+              标签
+              <input id="formTags" name="tags" placeholder="数组,哈希表">
+            </label>
+          </div>
+
+          <label>
+            题目描述
+            <textarea id="formDescription" name="description" rows="4"></textarea>
+          </label>
+
+          <label>
+            输入说明
+            <textarea id="formInputDescription" name="inputDescription" rows="2"></textarea>
+          </label>
+
+          <label>
+            输出说明
+            <textarea id="formOutputDescription" name="outputDescription" rows="2"></textarea>
+          </label>
+
+          <label>
+            数据范围
+            <textarea id="formConstraints" name="constraints" rows="2"></textarea>
+          </label>
+
+          <div class="form-row">
+            <label>
+              时间限制 ms
+              <input id="formTimeLimit" name="timeLimitMs" type="number" min="500" max="10000" step="100">
+            </label>
+            <label>
+              内存限制 MB
+              <input id="formMemoryLimit" name="memoryLimitMb" type="number" min="64" max="1024" step="64">
+            </label>
+          </div>
+
+          <label>
+            Java 模板
+            <textarea id="formJavaTemplate" name="javaTemplate" class="template-editor" rows="10" spellcheck="false"></textarea>
+          </label>
+
+          <div class="case-title-row">
+            <h3>测试用例</h3>
+            <button id="addCaseBtn" class="ghost-btn" type="button">添加用例</button>
+          </div>
+          <div id="testCaseList" class="test-case-list"></div>
+
+          <button class="primary-btn full-width" type="submit">保存题目</button>
+        </form>
+      </aside>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
