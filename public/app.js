@@ -42,8 +42,11 @@ const els = {
   sampleCases: document.querySelector("#sampleCases"),
   descriptionTabBtn: document.querySelector("#descriptionTabBtn"),
   submissionsTabBtn: document.querySelector("#submissionsTabBtn"),
+  solutionTabBtn: document.querySelector("#solutionTabBtn"),
   descriptionTab: document.querySelector("#descriptionTab"),
   submissionsTab: document.querySelector("#submissionsTab"),
+  solutionTab: document.querySelector("#solutionTab"),
+  solutionContent: document.querySelector("#solutionContent"),
   codeEditor: document.querySelector("#codeEditor"),
   resetCodeBtn: document.querySelector("#resetCodeBtn"),
   runBtn: document.querySelector("#runBtn"),
@@ -193,6 +196,7 @@ function renderProblemView() {
   els.inputDescription.textContent = problem.inputDescription || "暂无输入说明";
   els.outputDescription.textContent = problem.outputDescription || "暂无输出说明";
   els.constraints.textContent = problem.constraints || "暂无数据范围";
+  els.solutionContent.textContent = "当前题目还没有解析。后续可以在题目管理中增加解析字段，或者接入大模型后自动生成解析。";
   els.sampleCases.innerHTML = problem.testCases.length
     ? problem.testCases.map((testCase, index) => `
       <div class="sample">
@@ -213,14 +217,17 @@ function renderProblemView() {
 
 function renderInfoTabs() {
   const isSubmissions = state.activeInfoTab === "submissions";
-  els.descriptionTabBtn.classList.toggle("active", !isSubmissions);
+  const isSolution = state.activeInfoTab === "solution";
+  els.descriptionTabBtn.classList.toggle("active", !isSubmissions && !isSolution);
   els.submissionsTabBtn.classList.toggle("active", isSubmissions);
-  els.descriptionTab.classList.toggle("hidden", isSubmissions);
+  els.solutionTabBtn.classList.toggle("active", isSolution);
+  els.descriptionTab.classList.toggle("hidden", isSubmissions || isSolution);
   els.submissionsTab.classList.toggle("hidden", !isSubmissions);
+  els.solutionTab.classList.toggle("hidden", !isSolution);
 }
 
 function switchInfoTab(tabName) {
-  state.activeInfoTab = tabName === "submissions" ? "submissions" : "description";
+  state.activeInfoTab = ["submissions", "solution"].includes(tabName) ? tabName : "description";
   renderInfoTabs();
   if (state.activeInfoTab === "submissions") {
     loadSubmissions().catch((error) => showToast(error.message));
@@ -589,6 +596,7 @@ els.restoreSeedBtn.addEventListener("click", () => restoreSeedProblem().catch((e
 els.refreshSubmissionsBtn.addEventListener("click", () => loadSubmissions().catch((error) => showToast(error.message)));
 els.descriptionTabBtn.addEventListener("click", () => switchInfoTab("description"));
 els.submissionsTabBtn.addEventListener("click", () => switchInfoTab("submissions"));
+els.solutionTabBtn.addEventListener("click", () => switchInfoTab("solution"));
 els.toggleManagerBtn.addEventListener("click", toggleManager);
 els.newProblemBtn.addEventListener("click", () => {
   clearProblemView();

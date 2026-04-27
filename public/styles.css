@@ -21,6 +21,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -48,7 +54,8 @@ button:disabled {
 }
 
 .app {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .topbar {
@@ -101,7 +108,12 @@ button:disabled {
   min-height: 0;
   border-right: 1px solid var(--line);
   background: var(--surface);
-  overflow: auto;
+  overflow: hidden;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
 }
 
 .manager {
@@ -116,6 +128,7 @@ button:disabled {
 }
 
 .side-head {
+  flex: 0 0 auto;
   padding: 18px;
   border-bottom: 1px solid var(--line);
 }
@@ -155,6 +168,9 @@ textarea:focus {
 }
 
 .problem-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   padding: 10px;
 }
 
@@ -203,7 +219,7 @@ textarea:focus {
   min-width: 0;
   min-height: 0;
   padding: 18px;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .empty-state {
@@ -219,7 +235,15 @@ textarea:focus {
   color: var(--text);
 }
 
+.problem-panel {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .problem-header {
+  flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -233,10 +257,12 @@ textarea:focus {
 }
 
 .work-grid {
+  flex: 1 1 auto;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .statement,
@@ -249,10 +275,16 @@ textarea:focus {
 }
 
 .statement {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .tab-page {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   padding: 18px;
 }
 
@@ -272,6 +304,7 @@ textarea:focus {
 }
 
 .statement-tabs {
+  flex: 0 0 auto;
   display: flex;
   gap: 4px;
   padding: 8px 10px 0;
@@ -334,10 +367,14 @@ pre {
 }
 
 .judge-panel {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .editor-toolbar {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -348,8 +385,9 @@ pre {
 }
 
 .code-editor {
+  flex: 1 1 auto;
   display: block;
-  min-height: 430px;
+  min-height: 260px;
   border: 0;
   border-radius: 0;
   background: var(--code-bg);
@@ -365,7 +403,10 @@ pre {
 }
 
 .result-panel {
-  min-height: 110px;
+  flex: 0 0 220px;
+  min-height: 140px;
+  max-height: 36%;
+  overflow: auto;
   padding: 12px;
   border-top: 1px solid var(--line);
   background: #fbfcfe;
@@ -393,7 +434,7 @@ pre {
 
 .submission-list {
   max-height: none;
-  overflow: auto;
+  overflow: visible;
 }
 
 .submission-list > .result-empty {
@@ -489,7 +530,9 @@ pre {
 }
 
 .manager form {
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
   border-radius: 0;
   border-top: 0;
   border-bottom: 0;
@@ -694,27 +737,26 @@ label {
 
 @media (max-width: 1280px) {
   .layout {
-    grid-template-columns: 250px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr) 360px;
   }
 
   .layout.manager-collapsed {
-    grid-template-columns: 250px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr) 0;
   }
 
   .layout {
-    height: auto;
+    height: calc(100vh - 65px);
     min-height: calc(100vh - 65px);
-    overflow: visible;
+    overflow: hidden;
   }
 
   .manager {
-    grid-column: 1 / -1;
-    border-left: 0;
-    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+    border-top: 0;
   }
 
   .layout.manager-collapsed .manager {
-    display: none;
+    display: block;
   }
 
   .manager form {
@@ -723,6 +765,12 @@ label {
 }
 
 @media (max-width: 900px) {
+  html,
+  body,
+  .app {
+    overflow: auto;
+  }
+
   .topbar,
   .problem-header,
   .editor-toolbar,
@@ -736,10 +784,26 @@ label {
   .layout,
   .work-grid,
   .form-row {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
     grid-template-columns: 1fr;
   }
 
+  .problem-panel,
+  .statement,
+  .judge-panel {
+    height: auto;
+  }
+
+  .tab-page,
+  .result-panel,
+  .manager form {
+    overflow: visible;
+  }
+
   .sidebar {
+    display: block;
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
