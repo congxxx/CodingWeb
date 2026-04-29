@@ -74,6 +74,18 @@ function createSeedProblem() {
     difficulty: "简单",
     tags: ["数组", "哈希表"],
     description: "给定一个整数数组 nums 和一个目标值 target，请输出数组中和为 target 的两个元素下标。保证每组数据只有一个答案。",
+    solution: [
+      "## 思路",
+      "",
+      "用哈希表记录每个数字之前出现的位置。",
+      "",
+      "遍历数组时，先计算 `target - nums[i]`，如果它已经出现过，就直接输出这两个下标。",
+      "",
+      "## 复杂度",
+      "",
+      "- 时间复杂度：`O(n)`",
+      "- 空间复杂度：`O(n)`"
+    ].join("\n"),
     inputDescription: "第一行输入两个整数 n 和 target。第二行输入 n 个整数，表示数组 nums。",
     outputDescription: "输出两个整数，表示满足条件的两个下标，按从小到大输出。",
     constraints: "2 <= n <= 10000，-100000 <= nums[i], target <= 100000。",
@@ -237,7 +249,7 @@ async function handleApi(req, res, pathname) {
   if (req.method === "POST" && pathname === "/api/submissions/run") {
     // 运行样例：只拿样例用例判题，适合用户边写边调试。
     const payload = await readJsonBody(req);
-    const result = await createSubmission(payload, "RUN_SAMPLE");
+    const result = await runSubmission(payload);
     sendJson(res, 200, result);
     return;
   }
@@ -245,7 +257,7 @@ async function handleApi(req, res, pathname) {
   if (req.method === "POST" && pathname === "/api/submissions/submit") {
     // 正式提交：使用样例和隐藏用例一起判题，但隐藏用例内容不会返回给前端。
     const payload = await readJsonBody(req);
-    const result = await createSubmission(payload, "SUBMIT");
+    const result = await createSubmission(payload);
     sendJson(res, 200, result);
     return;
   }
@@ -256,6 +268,7 @@ async function handleApi(req, res, pathname) {
     const problemTitleById = new Map(db.problems.map((problem) => [problem.id, problem.title]));
     sendJson(res, 200, {
       submissions: db.submissions
+        .filter((submission) => submission.mode === "SUBMIT")
         .slice()
         .reverse()
         .map((submission) => ({
@@ -289,8 +302,8 @@ async function handleApi(req, res, pathname) {
   sendJson(res, 404, { message: "接口不存在" });
 }
 
-async function createSubmission(payload, mode) {
-  // 这里负责把一次“运行样例”或“正式提交”转换成提交记录。
+async function prepareSubmission(payload, mode) {
+  // 这里负责把一次“运行样例”或“正式提交”转换成统一判题结果。
   const problemId = String(payload.problemId || "");
   const code = String(payload.code || "");
   if (!problemId) {
@@ -320,9 +333,9 @@ async function createSubmission(payload, mode) {
   const judgeResult = await judgeJava(problem, code, cases, mode);
   const now = new Date().toISOString();
 
-  // 判题结束后，把结果和代码一起存下来，方便以后查看历史提交。
-  const submission = {
-    id: crypto.randomUUID(),
+  return {
+    problem,
+    submission: {
     problemId: problem.id,
     code,
     language: "JAVA",
@@ -336,7 +349,22 @@ async function createSubmission(payload, mode) {
     caseResults: judgeResult.caseResults,
     createdAt: now,
     updatedAt: now
+    }
   };
+}
+
+async function runSubmission(payload) {
+  // 运行样例只返回结果，不写入提交记录。
+  const { submission } = await prepareSubmission(payload, "RUN_SAMPLE");
+  return { submission };
+}
+
+async function createSubmission(payload) {
+  // 正式提交会写入历史记录，供后续查看。
+  const { submission } = await prepareSubmission(payload, "SUBMIT");
+  submission.id = crypto.randomUUID();
+
+  const db = await readDb();
   db.submissions.push(submission);
   await writeDb(db);
   return { submission };
@@ -611,6 +639,7 @@ function normalizeProblemPayload(payload, existing = {}) {
     difficulty: ["简单", "中等", "困难"].includes(payload.difficulty) ? payload.difficulty : "简单",
     tags,
     description: String(payload.description || ""),
+    solution: String(payload.solution || ""),
     inputDescription: String(payload.inputDescription || ""),
     outputDescription: String(payload.outputDescription || ""),
     constraints: String(payload.constraints || ""),
@@ -667,6 +696,7 @@ function toPublicProblem(problem) {
     difficulty: problem.difficulty,
     tags: problem.tags || [],
     description: problem.description,
+    solution: problem.solution || "",
     inputDescription: problem.inputDescription,
     outputDescription: problem.outputDescription,
     constraints: problem.constraints,

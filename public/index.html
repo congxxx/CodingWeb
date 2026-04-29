@@ -4,6 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CodingWeb - Java 刷题</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]]
+      },
+      svg: {
+        fontCache: "global"
+      },
+      options: {
+        skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -59,7 +74,7 @@
               <div id="descriptionTab" class="tab-page">
                 <section>
                   <h3>题目描述</h3>
-                  <p id="problemDescription"></p>
+                  <div id="problemDescription" class="markdown-content"></div>
                 </section>
                 <section>
                   <h3>输入说明</h3>
@@ -93,7 +108,7 @@
               <div id="solutionTab" class="tab-page hidden">
                 <section>
                   <h3>题目解析</h3>
-                  <p id="solutionContent"></p>
+                  <div id="solutionContent" class="markdown-content"></div>
                 </section>
               </div>
             </article>
@@ -157,6 +172,11 @@
           <label>
             题目描述
             <textarea id="formDescription" name="description" rows="4"></textarea>
+          </label>
+
+          <label>
+            题目解析
+            <textarea id="formSolution" name="solution" rows="8" spellcheck="false" placeholder="支持 Markdown，例如标题、列表、代码块"></textarea>
           </label>
 
           <label>

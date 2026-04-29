@@ -70,6 +70,7 @@ const els = {
   formDifficulty: document.querySelector("#formDifficulty"),
   formTags: document.querySelector("#formTags"),
   formDescription: document.querySelector("#formDescription"),
+  formSolution: document.querySelector("#formSolution"),
   formInputDescription: document.querySelector("#formInputDescription"),
   formOutputDescription: document.querySelector("#formOutputDescription"),
   formConstraints: document.querySelector("#formConstraints"),
@@ -87,6 +88,109 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function renderInlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+}
+
+function renderMarkdown(source) {
+  const text = String(source || "").replace(/\r\n/g, "\n");
+  if (!text.trim()) {
+    return '<p class="markdown-empty">暂无内容。</p>';
+  }
+
+  const lines = text.split("\n");
+  const html = [];
+  let index = 0;
+
+  while (index < lines.length) {
+    const line = lines[index];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      index += 1;
+      continue;
+    }
+
+    if (trimmed.startsWith("```")) {
+      const codeLines = [];
+      const fence = trimmed;
+      index += 1;
+      while (index < lines.length && lines[index].trim() !== fence) {
+        codeLines.push(lines[index]);
+        index += 1;
+      }
+      if (index < lines.length) {
+        index += 1;
+      }
+      html.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+      continue;
+    }
+
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      html.push(`<h${level}>${renderInlineMarkdown(headingMatch[2])}</h${level}>`);
+      index += 1;
+      continue;
+    }
+
+    if (/^[-*]\s+/.test(trimmed)) {
+      const items = [];
+      while (index < lines.length && /^[-*]\s+/.test(lines[index].trim())) {
+        items.push(`<li>${renderInlineMarkdown(lines[index].trim().replace(/^[-*]\s+/, ""))}</li>`);
+        index += 1;
+      }
+      html.push(`<ul>${items.join("")}</ul>`);
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(trimmed)) {
+      const items = [];
+      while (index < lines.length && /^\d+\.\s+/.test(lines[index].trim())) {
+        items.push(`<li>${renderInlineMarkdown(lines[index].trim().replace(/^\d+\.\s+/, ""))}</li>`);
+        index += 1;
+      }
+      html.push(`<ol>${items.join("")}</ol>`);
+      continue;
+    }
+
+    if (/^>\s?/.test(trimmed)) {
+      const quoteLines = [];
+      while (index < lines.length && /^>\s?/.test(lines[index].trim())) {
+        quoteLines.push(renderInlineMarkdown(lines[index].trim().replace(/^>\s?/, "")));
+        index += 1;
+      }
+      html.push(`<blockquote>${quoteLines.join("<br>")}</blockquote>`);
+      continue;
+    }
+
+    const paragraphLines = [];
+    while (index < lines.length && lines[index].trim()) {
+      paragraphLines.push(renderInlineMarkdown(lines[index]));
+      index += 1;
+    }
+    html.push(`<p>${paragraphLines.join("<br>")}</p>`);
+  }
+
+  return html.join("");
+}
+
+async function renderMathInElement(element) {
+  if (!element || !window.MathJax?.typesetPromise) {
+    return;
+  }
+
+  try {
+    await window.MathJax.typesetPromise([element]);
+  } catch (error) {
+    console.error("MathJax render failed:", error);
+  }
 }
 
 async function api(path, options = {}) {
@@ -205,11 +309,13 @@ function renderProblemView() {
   els.problemMeta.textContent = `${problem.difficulty} · ${(problem.tags || []).join(" / ") || "无标签"}`;
   els.problemTitle.textContent = problem.title;
   els.problemLimits.textContent = `时间 ${problem.timeLimitMs} ms · 内存 ${problem.memoryLimitMb} MB`;
-  els.problemDescription.textContent = problem.description || "暂无描述";
+  els.problemDescription.innerHTML = renderMarkdown(problem.description);
   els.inputDescription.textContent = problem.inputDescription || "暂无输入说明";
   els.outputDescription.textContent = problem.outputDescription || "暂无输出说明";
   els.constraints.textContent = problem.constraints || "暂无数据范围";
-  els.solutionContent.textContent = "当前题目还没有解析。后续可以在题目管理中增加解析字段，或者接入大模型后自动生成解析。";
+  els.solutionContent.innerHTML = renderMarkdown(problem.solution);
+  renderMathInElement(els.problemDescription);
+  renderMathInElement(els.solutionContent);
   els.sampleCases.innerHTML = problem.testCases.length
     ? problem.testCases.map((testCase, index) => `
       <div class="sample">
@@ -372,6 +478,7 @@ function fillProblemForm(problem) {
   els.formDifficulty.value = problem.difficulty || "简单";
   els.formTags.value = (problem.tags || []).join(",");
   els.formDescription.value = problem.description || "";
+  els.formSolution.value = problem.solution || "";
   els.formInputDescription.value = problem.inputDescription || "";
   els.formOutputDescription.value = problem.outputDescription || "";
   els.formConstraints.value = problem.constraints || "";
@@ -410,6 +517,7 @@ function readProblemForm() {
     difficulty: els.formDifficulty.value,
     tags: els.formTags.value.split(",").map((tag) => tag.trim()).filter(Boolean),
     description: els.formDescription.value,
+    solution: els.formSolution.value,
     inputDescription: els.formInputDescription.value,
     outputDescription: els.formOutputDescription.value,
     constraints: els.formConstraints.value,
@@ -432,6 +540,7 @@ function createBlankProblem() {
     difficulty: "简单",
     tags: [],
     description: "",
+    solution: "",
     inputDescription: "",
     outputDescription: "",
     constraints: "",
