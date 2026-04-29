@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CodingWeb MVP</title>
+  <title>CodingWeb - Java 刷题</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <div class="app">
     <header class="topbar">
-      <div>
-        <div class="brand">CodingWeb</div>
-        <div class="subline">Java 自定义刷题 MVP</div>
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">CW</div>
+        <div>
+          <div class="brand">CodingWeb</div>
+          <div class="subline">Java 刷题训练台</div>
+        </div>
       </div>
       <div class="top-actions">
         <button id="refreshBtn" class="ghost-btn" type="button">刷新</button>
@@ -24,7 +27,8 @@
     <main class="layout">
       <aside class="sidebar" aria-label="题目列表">
         <div class="side-head">
-          <h1>题目</h1>
+          <div class="section-kicker">Problems</div>
+          <h1>题目库</h1>
           <input id="searchInput" class="search" type="search" placeholder="搜索标题或标签">
         </div>
         <div id="problemList" class="problem-list"></div>
@@ -42,7 +46,6 @@
               <div id="problemMeta" class="meta"></div>
               <h2 id="problemTitle"></h2>
             </div>
-            <div class="limit-line" id="problemLimits"></div>
           </div>
 
           <div class="work-grid">
@@ -97,14 +100,21 @@
 
             <section class="judge-panel">
               <div class="editor-toolbar">
-                <span>Java 代码</span>
+                <div class="editor-title-group">
+                  <span class="editor-title">Main.java</span>
+                  <span class="limit-line editor-limits" id="problemLimits"></span>
+                </div>
                 <div class="button-row">
                   <button id="resetCodeBtn" class="ghost-btn" type="button">重置</button>
                   <button id="runBtn" class="ghost-btn" type="button">运行样例</button>
                   <button id="submitBtn" class="primary-btn" type="button">提交</button>
                 </div>
               </div>
-              <textarea id="codeEditor" class="code-editor" spellcheck="false"></textarea>
+              <div class="code-shell">
+                <pre id="codeHighlight" class="code-highlight" aria-hidden="true"><code></code></pre>
+                <textarea id="codeEditor" class="code-editor" spellcheck="false"></textarea>
+              </div>
+              <div id="judgeResizeHandle" class="judge-resize-handle" role="separator" aria-orientation="horizontal" aria-label="调整代码区和结果区大小"></div>
               <div id="resultPanel" class="result-panel" aria-live="polite"></div>
             </section>
           </div>

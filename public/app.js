@@ -47,7 +47,10 @@ const els = {
   submissionsTab: document.querySelector("#submissionsTab"),
   solutionTab: document.querySelector("#solutionTab"),
   solutionContent: document.querySelector("#solutionContent"),
+  codeHighlight: document.querySelector("#codeHighlight code"),
   codeEditor: document.querySelector("#codeEditor"),
+  judgeResizeHandle: document.querySelector("#judgeResizeHandle"),
+  judgePanel: document.querySelector(".judge-panel"),
   resetCodeBtn: document.querySelector("#resetCodeBtn"),
   runBtn: document.querySelector("#runBtn"),
   submitBtn: document.querySelector("#submitBtn"),
@@ -172,12 +175,22 @@ function renderProblemList() {
     <button class="problem-item ${problem.id === state.selectedProblemId ? "active" : ""}" type="button" data-id="${escapeHtml(problem.id)}">
       <span class="problem-item-title">
         <span>${escapeHtml(problem.title)}</span>
-        <span class="difficulty">${escapeHtml(problem.difficulty)}</span>
+        <span class="difficulty ${difficultyClass(problem.difficulty)}">${escapeHtml(problem.difficulty)}</span>
       </span>
       <span class="tag-line">${escapeHtml((problem.tags || []).join(" / ") || "无标签")}</span>
       <span class="tag-line">样例 ${problem.sampleCount} · 隐藏 ${problem.hiddenCount}</span>
     </button>
   `).join("");
+}
+
+function difficultyClass(difficulty) {
+  if (difficulty === "困难") {
+    return "hard";
+  }
+  if (difficulty === "中等") {
+    return "medium";
+  }
+  return "easy";
 }
 
 function renderProblemView() {
@@ -210,6 +223,7 @@ function renderProblemView() {
 
   const savedCode = localStorage.getItem(codeStorageKey(problem.id));
   els.codeEditor.value = savedCode || problem.javaTemplate || "";
+  updateCodeHighlight();
   state.lastSubmission = null;
   state.resultCaseIndex = 0;
   els.resultPanel.innerHTML = '<div class="result-empty">运行样例或提交后，结果会显示在这里。</div>';
@@ -447,6 +461,84 @@ function defaultJavaTemplate() {
   ].join("\n");
 }
 
+function highlightJava(code) {
+  const source = String(code || "\n");
+  const keywordPattern = /\b(import|package|public|private|protected|class|static|void|main|new|return|if|else|for|while|do|switch|case|break|continue|try|catch|finally|throw|throws|extends|implements|interface|enum|final|int|long|double|float|boolean|char|byte|short|String|Scanner|System)\b/;
+  const tokenPattern = /(\/\/.*)|("(?:\\.|[^"\\])*")|\b\d+\b|\b(?:import|package|public|private|protected|class|static|void|main|new|return|if|else|for|while|do|switch|case|break|continue|try|catch|finally|throw|throws|extends|implements|interface|enum|final|int|long|double|float|boolean|char|byte|short|String|Scanner|System)\b/g;
+  let html = "";
+  let cursor = 0;
+  for (const match of source.matchAll(tokenPattern)) {
+    const token = match[0];
+    html += escapeHtml(source.slice(cursor, match.index));
+    const escaped = escapeHtml(token);
+    if (token.startsWith("//")) {
+      html += `<span class="token-comment">${escaped}</span>`;
+    } else if (token.startsWith('"')) {
+      html += `<span class="token-string">${escaped}</span>`;
+    } else if (/^\d+$/.test(token)) {
+      html += `<span class="token-number">${escaped}</span>`;
+    } else if (keywordPattern.test(token)) {
+      html += `<span class="token-keyword">${escaped}</span>`;
+    } else {
+      html += escaped;
+    }
+    cursor = match.index + token.length;
+  }
+  html += escapeHtml(source.slice(cursor));
+  return html;
+}
+
+function updateCodeHighlight() {
+  if (!els.codeHighlight) {
+    return;
+  }
+  els.codeHighlight.innerHTML = highlightJava(els.codeEditor.value);
+}
+
+function syncCodeScroll() {
+  const highlight = els.codeHighlight?.parentElement;
+  if (!highlight) {
+    return;
+  }
+  highlight.scrollTop = els.codeEditor.scrollTop;
+  highlight.scrollLeft = els.codeEditor.scrollLeft;
+}
+
+function startJudgeResize(event) {
+  if (!els.judgePanel || !els.resultPanel) {
+    return;
+  }
+  event.preventDefault();
+  const panelRect = els.judgePanel.getBoundingClientRect();
+  const minCodeHeight = 180;
+  const minResultHeight = 110;
+  const toolbarHeight = els.judgePanel.querySelector(".editor-toolbar")?.offsetHeight || 0;
+  const handleHeight = els.judgeResizeHandle?.offsetHeight || 0;
+  const availableHeight = panelRect.height - toolbarHeight - handleHeight;
+
+  function resize(moveEvent) {
+    const pointerY = moveEvent.clientY ?? moveEvent.touches?.[0]?.clientY;
+    if (typeof pointerY !== "number") {
+      return;
+    }
+    const nextResultHeight = panelRect.bottom - pointerY;
+    const maxResultHeight = Math.max(minResultHeight, availableHeight - minCodeHeight);
+    const clampedHeight = Math.max(minResultHeight, Math.min(maxResultHeight, nextResultHeight));
+    els.resultPanel.style.flexBasis = `${Math.round(clampedHeight)}px`;
+    els.resultPanel.style.maxHeight = "none";
+  }
+
+  function stopResize() {
+    document.body.classList.remove("is-resizing-judge");
+    window.removeEventListener("pointermove", resize);
+    window.removeEventListener("pointerup", stopResize);
+  }
+
+  document.body.classList.add("is-resizing-judge");
+  window.addEventListener("pointermove", resize);
+  window.addEventListener("pointerup", stopResize, { once: true });
+}
+
 async function saveProblem(event) {
   event.preventDefault();
   const problem = readProblemForm();
@@ -606,14 +698,18 @@ els.newProblemBtn.addEventListener("click", () => {
 els.resetCodeBtn.addEventListener("click", () => {
   if (state.currentProblem) {
     els.codeEditor.value = state.currentProblem.javaTemplate || "";
+    updateCodeHighlight();
     localStorage.removeItem(codeStorageKey(state.currentProblem.id));
   }
 });
 els.codeEditor.addEventListener("input", () => {
+  updateCodeHighlight();
   if (state.currentProblem) {
     localStorage.setItem(codeStorageKey(state.currentProblem.id), els.codeEditor.value);
   }
 });
+els.codeEditor.addEventListener("scroll", syncCodeScroll);
+els.judgeResizeHandle.addEventListener("pointerdown", startJudgeResize);
 els.runBtn.addEventListener("click", () => runJudge("RUN_SAMPLE"));
 els.submitBtn.addEventListener("click", () => runJudge("SUBMIT"));
 els.resultPanel.addEventListener("click", (event) => {
