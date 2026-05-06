@@ -1,5 +1,10 @@
 node_modules/
 tmp/
+target/
+*.class
 *.log
-开发记录/
+.codex/
+.idea/
+.uploads/
+CodingWeb面试备战手册.docx
 刷题网站流程文档.md

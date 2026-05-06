@@ -1,6 +1,55 @@
 {
   "problems": [
     {
+      "id": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "title": "拼多多-暑期2",
+      "difficulty": "简单",
+      "tags": [],
+      "description": "有 \\(m\\) 个推荐位，每个推荐位有一个热度值 \\(s_j\\)。\n有 \\(n\\) 条内容，每条内容要求：必须放在热度在 \\([l_i, r_i]\\) 区间内的推荐位上。\n\n### 约束规则\n1. 一条内容只能放置在一个推荐位\n2. 一个推荐位只能放置一条内容\n3. 内容 \\(i\\) 可以放置在推荐位 \\(j\\) 的充要条件：\\(l_i \\le s_j \\le r_i\\)\n\n### 求解目标\n求最多能上架多少条内容？",
+      "solution": "",
+      "inputDescription": "",
+      "outputDescription": "",
+      "constraints": "",
+      "javaTemplate": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // 在这里编写代码\n    }\n}",
+      "timeLimitMs": 2000,
+      "memoryLimitMb": 256,
+      "testCases": [
+        {
+          "id": "e8adabbf-1334-4fb1-9635-436742c3190d",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "isSample": true,
+          "sortOrder": 1
+        }
+      ],
+      "createdAt": "2026-04-27T13:50:47.094Z",
+      "updatedAt": "2026-04-29T07:54:35.192Z"
+    },
+    {
+      "id": "a93e0686-076e-4b69-973c-6fbf4f087791",
+      "title": "拼多多-暑期3",
+      "difficulty": "简单",
+      "tags": [],
+      "description": " 给定 m 行 n 列 的拼图，总块数为 mxn。给出若干条相对位置关系：每行输入 (a,b,dir)，含义：拼图块 a 在 拼图块 b 的 dir 方向\n U：a 在 b 的正上方\n B：a 在 b 的正下方\n L：a 在 b 的正左方\n R：a 在 b 的正右方\n\n 已知：\n 所有拼图刚好组成完整 mxn 矩形；\n 利用全部相对关系，还原每块拼图的绝对坐标；\n 按从上到下、从左到右顺序，输出完整拼图矩阵。",
+      "inputDescription": "",
+      "outputDescription": "",
+      "constraints": "",
+      "javaTemplate": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // 在这里编写代码\n    }\n}",
+      "timeLimitMs": 2000,
+      "memoryLimitMb": 256,
+      "testCases": [
+        {
+          "id": "d95b18fb-2ee9-4932-853a-1a1d6c19a5f3",
+          "input": "2 2\n4\n4 3 U\n1 4 R\n4 1 L\n3 2 L",
+          "expectedOutput": "4 1\n3 2",
+          "isSample": true,
+          "sortOrder": 1
+        }
+      ],
+      "createdAt": "2026-04-27T13:12:33.378Z",
+      "updatedAt": "2026-04-27T13:15:56.897Z"
+    },
+    {
       "id": "seed-two-sum",
       "title": "两数之和",
       "difficulty": "简单",
@@ -39,8 +88,480 @@
         }
       ],
       "createdAt": "2026-04-27T00:00:00.000Z",
-      "updatedAt": "2026-04-27T00:00:00.000Z"
+      "updatedAt": "2026-04-27T12:40:44.162Z"
     }
   ],
-  "submissions": []
+  "submissions": [
+    {
+      "id": "e8268fbc-6d98-492c-ba05-2f5dda24132f",
+      "problemId": "seed-two-sum",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int target = scanner.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) {\n            nums[i] = scanner.nextInt();\n        }\n\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int need = target - nums[i];\n            if (seen.containsKey(need)) {\n                int a = seen.get(need);\n                int b = i;\n                System.out.println(Math.min(a, b) + \" \" + Math.max(a, b));\n                return;\n            }\n            seen.put(nums[i], i);\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 2,
+      "totalCount": 2,
+      "timeUsedMs": 154,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 154,
+          "message": "",
+          "input": "4 9\n2 7 11 15\n",
+          "expectedOutput": "0 1\n",
+          "actualOutput": "0 1\r\n"
+        },
+        {
+          "index": 2,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 118,
+          "message": "",
+          "input": "3 6\n3 2 4\n",
+          "expectedOutput": "1 2\n",
+          "actualOutput": "1 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T12:44:21.347Z",
+      "updatedAt": "2026-04-27T12:44:21.347Z"
+    },
+    {
+      "id": "8f8857a1-a0cb-4b78-b71b-1920d8f41a6a",
+      "problemId": "seed-two-sum",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int target = scanner.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) {\n            nums[i] = scanner.nextInt();\n        }\n\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int need = target - nums[i];\n            if (seen.containsKey(need)) {\n                int a = seen.get(need);\n                int b = i;\n                System.out.println(Math.min(a, b) + \" \" + Math.max(a, b));\n                return;\n            }\n            seen.put(nums[i], i);\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 2,
+      "totalCount": 2,
+      "timeUsedMs": 121,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 118,
+          "message": "",
+          "input": "4 9\n2 7 11 15\n",
+          "expectedOutput": "0 1\n",
+          "actualOutput": "0 1\r\n"
+        },
+        {
+          "index": 2,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 121,
+          "message": "",
+          "input": "3 6\n3 2 4\n",
+          "expectedOutput": "1 2\n",
+          "actualOutput": "1 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T12:47:46.608Z",
+      "updatedAt": "2026-04-27T12:47:46.608Z"
+    },
+    {
+      "id": "71e1b8a2-3b42-482f-be6a-3f4564282ba6",
+      "problemId": "seed-two-sum",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int target = scanner.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) {\n            nums[i] = scanner.nextInt();\n        }\n\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int need = target - nums[i];\n            if (seen.containsKey(need)) {\n                int a = seen.get(need);\n                int b = i;\n                System.out.println(Math.min(a, b) + \" \" + Math.max(a, b));\n                return;\n            }\n            seen.put(nums[i], i);\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 2,
+      "totalCount": 2,
+      "timeUsedMs": 167,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 167,
+          "message": "",
+          "input": "4 9\n2 7 11 15\n",
+          "expectedOutput": "0 1\n",
+          "actualOutput": "0 1\r\n"
+        },
+        {
+          "index": 2,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 122,
+          "message": "",
+          "input": "3 6\n3 2 4\n",
+          "expectedOutput": "1 2\n",
+          "actualOutput": "1 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T12:50:15.218Z",
+      "updatedAt": "2026-04-27T12:50:15.218Z"
+    },
+    {
+      "id": "4fa7fa40-d1f1-45b0-8941-be7d37787414",
+      "problemId": "seed-two-sum",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int target = scanner.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) {\n            nums[i] = scanner.nextInt();\n        }\n\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int need = target - nums[i];\n            if (seen.containsKey(need)) {\n                int a = seen.get(need);\n                int b = i;\n                System.out.println(Math.min(a, b) + \" \" + Math.max(a, b));\n                return;\n            }\n            seen.put(nums[i], i);\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 2,
+      "totalCount": 2,
+      "timeUsedMs": 139,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 139,
+          "message": "",
+          "input": "4 9\n2 7 11 15\n",
+          "expectedOutput": "0 1\n",
+          "actualOutput": "0 1\r\n"
+        },
+        {
+          "index": 2,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 106,
+          "message": "",
+          "input": "3 6\n3 2 4\n",
+          "expectedOutput": "1 2\n",
+          "actualOutput": "1 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T12:55:05.820Z",
+      "updatedAt": "2026-04-27T12:55:05.820Z"
+    },
+    {
+      "id": "d88d9e2f-2595-4101-9927-327b23df4236",
+      "problemId": "seed-two-sum",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int target = scanner.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) {\n            nums[i] = scanner.nextInt();\n        }\n\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int need = target - nums[i];\n            if (seen.containsKey(need)) {\n                int a = seen.get(need);\n                int b = i;\n                System.out.println(Math.min(a, b) + \" \" + Math.max(a, b));\n                return;\n            }\n            seen.put(nums[i], i);\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 2,
+      "totalCount": 2,
+      "timeUsedMs": 154,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 140,
+          "message": "",
+          "input": "4 9\n2 7 11 15\n",
+          "expectedOutput": "0 1\n",
+          "actualOutput": "0 1\r\n"
+        },
+        {
+          "index": 2,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 154,
+          "message": "",
+          "input": "3 6\n3 2 4\n",
+          "expectedOutput": "1 2\n",
+          "actualOutput": "1 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T13:03:53.729Z",
+      "updatedAt": "2026-04-27T13:03:53.729Z"
+    },
+    {
+      "id": "dc1e8bcb-bd72-4aa3-b7c4-cc92106ba07b",
+      "problemId": "a93e0686-076e-4b69-973c-6fbf4f087791",
+      "code": "import java.util.*;\n\npublic class Main {\n\n    /**\n     * Edge 表示图中的一条边\n     *\n     * 例如：\n     * 如果有关系：a 在 b 的右边\n     * 那么从 b 可以走到 a，移动方向是：\n     * dx = 1, dy = 0\n     *\n     * to：当前拼图块相邻的拼图块编号\n     * dx：列方向偏移量，向右为 +1，向左为 -1\n     * dy：行方向偏移量，向下为 +1，向上为 -1\n     */\n    static class Edge {\n        int to;\n        int dx;\n        int dy;\n\n        Edge(int to, int dx, int dy) {\n            this.to = to;\n            this.dx = dx;\n            this.dy = dy;\n        }\n    }\n\n    /**\n     * Point 表示某个拼图块的坐标\n     *\n     * 注意：\n     * x 表示列坐标，向右增加\n     * y 表示行坐标，向下增加\n     *\n     * 所以最后放入二维数组时：\n     * row = y\n     * col = x\n     */\n    static class Point {\n        int x;\n        int y;\n\n        Point(int x, int y) {\n            this.x = x;\n            this.y = y;\n        }\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // m 行，n 列\n        int m = sc.nextInt();\n        int n = sc.nextInt();\n\n        // 拼图总数\n        int total = m * n;\n\n        // 相对位置关系数量\n        int k = sc.nextInt();\n\n        /**\n         * graph[i] 存储与第 i 块拼图相邻的拼图块\n         *\n         * 因为拼图块编号是 1 到 total，\n         * 所以数组大小开 total + 1，方便直接用编号作为下标。\n         */\n        List<Edge>[] graph = new ArrayList[total + 1];\n\n        // 初始化每个点的邻接表\n        for (int i = 1; i <= total; i++) {\n            graph[i] = new ArrayList<>();\n        }\n\n        /**\n         * 读取 k 条相对位置关系\n         *\n         * 输入格式：\n         * a b dir\n         *\n         * 含义：\n         * a 在 b 的 dir 方向\n         *\n         * 例如：\n         * 4 3 U\n         * 表示 4 在 3 的上方\n         */\n        for (int i = 0; i < k; i++) {\n            int a = sc.nextInt();\n            int b = sc.nextInt();\n            String dir = sc.next();\n\n            /**\n             * dx、dy 表示：\n             * 从 b 走到 a 时，坐标应该怎么变化\n             *\n             * 坐标规则：\n             * x 表示列，向右增加\n             * y 表示行，向下增加\n             */\n            int dx = 0, dy = 0;\n\n            if (dir.equals(\"U\")) {\n                // a 在 b 上方\n                // 从 b 到 a：行数减少 1\n                dx = 0;\n                dy = -1;\n            } else if (dir.equals(\"B\")) {\n                // a 在 b 下方\n                // 从 b 到 a：行数增加 1\n                dx = 0;\n                dy = 1;\n            } else if (dir.equals(\"L\")) {\n                // a 在 b 左方\n                // 从 b 到 a：列数减少 1\n                dx = -1;\n                dy = 0;\n            } else if (dir.equals(\"R\")) {\n                // a 在 b 右方\n                // 从 b 到 a：列数增加 1\n                dx = 1;\n                dy = 0;\n            }\n\n            /**\n             * 建图：\n             *\n             * 已知 a 在 b 的 dir 方向，\n             * 所以从 b 可以走到 a，偏移量是 dx、dy。\n             */\n            graph[b].add(new Edge(a, dx, dy));\n\n            /**\n             * 同时还要加入反向边。\n             *\n             * 如果从 b 到 a 的偏移是 dx、dy，\n             * 那么从 a 到 b 的偏移就是 -dx、-dy。\n             *\n             * 这样 BFS 时无论从哪个拼图块开始，\n             * 都可以沿着关系推导出其它拼图块的位置。\n             */\n            graph[a].add(new Edge(b, -dx, -dy));\n        }\n\n        /**\n         * pos[i] 表示第 i 块拼图的坐标\n         *\n         * 因为一开始我们不知道真实绝对坐标，\n         * 所以先假设某一块拼图的位置是 (0, 0)，\n         * 然后通过相对关系推出其它拼图块的相对坐标。\n         */\n        Point[] pos = new Point[total + 1];\n\n        // visited[i] 表示第 i 块拼图是否已经计算过坐标\n        boolean[] visited = new boolean[total + 1];\n\n        Queue<Integer> queue = new LinkedList<>();\n\n        /**\n         * 从 1 号拼图块开始 BFS。\n         *\n         * 题目保证所有拼图能组成一个完整矩形，\n         * 并且关系足够还原所有位置，\n         * 所以从任意一块开始都可以。\n         *\n         * 这里把 1 号块的坐标暂时设为 (0, 0)。\n         */\n        visited[1] = true;\n        pos[1] = new Point(0, 0);\n        queue.offer(1);\n\n        /**\n         * BFS 推导所有拼图块的相对坐标\n         */\n        while (!queue.isEmpty()) {\n            int cur = queue.poll();\n\n            // 遍历当前拼图块的所有相邻拼图块\n            for (Edge edge : graph[cur]) {\n                int next = edge.to;\n\n                // 如果 next 还没有计算过坐标，就根据 cur 的坐标推导出来\n                if (!visited[next]) {\n                    visited[next] = true;\n\n                    /**\n                     * next 的坐标 =\n                     * 当前块 cur 的坐标 + 从 cur 到 next 的偏移量\n                     */\n                    pos[next] = new Point(\n                            pos[cur].x + edge.dx,\n                            pos[cur].y + edge.dy\n                    );\n\n                    queue.offer(next);\n                }\n            }\n        }\n\n        /**\n         * BFS 得到的坐标可能包含负数。\n         *\n         * 例如：\n         * 如果 1 号块在中间，\n         * 它左边和上边的拼图块坐标就可能是负数。\n         *\n         * 但是二维数组下标不能是负数，\n         * 所以要找到最小的 x 和 y，\n         * 然后把所有坐标整体平移成非负数。\n         */\n        int minX = Integer.MAX_VALUE;\n        int minY = Integer.MAX_VALUE;\n\n        for (int i = 1; i <= total; i++) {\n            minX = Math.min(minX, pos[i].x);\n            minY = Math.min(minY, pos[i].y);\n        }\n\n        /**\n         * ans[row][col] 表示最终拼图矩阵\n         *\n         * m 行 n 列：\n         * row 范围是 0 到 m - 1\n         * col 范围是 0 到 n - 1\n         */\n        int[][] ans = new int[m][n];\n\n        /**\n         * 将每个拼图块放入最终矩阵中\n         */\n        for (int i = 1; i <= total; i++) {\n            // x 是列坐标，所以对应 col\n            int col = pos[i].x - minX;\n\n            // y 是行坐标，所以对应 row\n            int row = pos[i].y - minY;\n\n            ans[row][col] = i;\n        }\n\n        /**\n         * 按从上到下、从左到右输出完整拼图矩阵\n         */\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (j > 0) {\n                    System.out.print(\" \");\n                }\n                System.out.print(ans[i][j]);\n            }\n            System.out.println();\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 106,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 106,
+          "message": "",
+          "input": "2 2\n4\n4 3 U\n1 4 R\n4 1 L\n3 2 L",
+          "expectedOutput": "4 1\n3 2",
+          "actualOutput": "4 1\r\n3 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T13:13:22.569Z",
+      "updatedAt": "2026-04-27T13:13:22.569Z"
+    },
+    {
+      "id": "063f04bb-f236-4ccc-ae82-97bcefcdaede",
+      "problemId": "a93e0686-076e-4b69-973c-6fbf4f087791",
+      "code": "import java.util.*;\n\npublic class Main {\n    static class Edge {\n        int to;\n        int dx;\n        int dy;\n\n        Edge(int to, int dx, int dy) {\n            this.to = to;\n            this.dx = dx;\n            this.dy = dy;\n        }\n    }\n\n    static class Point {\n        int x;\n        int y;\n\n        Point(int x, int y) {\n            this.x = x;\n            this.y = y;\n        }\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        List<Edge>[] graph = new ArrayList[total + 1];\n\n        // 初始化每个点的邻接表\n        for (int i = 1; i <= total; i++) {\n            graph[i] = new ArrayList<>();\n        }\n\n        for (int i = 0; i < k; i++) {\n            int a = sc.nextInt();\n            int b = sc.nextInt();\n            String dir = sc.next();\n\n            int dx = 0, dy = 0;\n\n            if (dir.equals(\"U\")) {\n                // a 在 b 上方\n                // 从 b 到 a：行数减少 1\n                dx = 0;\n                dy = -1;\n            } else if (dir.equals(\"B\")) {\n                // a 在 b 下方\n                // 从 b 到 a：行数增加 1\n                dx = 0;\n                dy = 1;\n            } else if (dir.equals(\"L\")) {\n                // a 在 b 左方\n                // 从 b 到 a：列数减少 1\n                dx = -1;\n                dy = 0;\n            } else if (dir.equals(\"R\")) {\n                // a 在 b 右方\n                // 从 b 到 a：列数增加 1\n                dx = 1;\n                dy = 0;\n            }\n\n            graph[b].add(new Edge(a, dx, dy));\n\n            graph[a].add(new Edge(b, -dx, -dy));\n        }\n\n        Point[] pos = new Point[total + 1];\n\n        // visited[i] 表示第 i 块拼图是否已经计算过坐标\n        boolean[] visited = new boolean[total + 1];\n\n        Queue<Integer> queue = new LinkedList<>();\n\n        visited[1] = true;\n        pos[1] = new Point(0, 0);\n        queue.offer(1);\n\n        /**\n         * BFS 推导所有拼图块的相对坐标\n         */\n        while (!queue.isEmpty()) {\n            int cur = queue.poll();\n\n            // 遍历当前拼图块的所有相邻拼图块\n            for (Edge edge : graph[cur]) {\n                int next = edge.to;\n\n                // 如果 next 还没有计算过坐标，就根据 cur 的坐标推导出来\n                if (!visited[next]) {\n                    visited[next] = true;\n\n                    /**\n                     * next 的坐标 =\n                     * 当前块 cur 的坐标 + 从 cur 到 next 的偏移量\n                     */\n                    pos[next] = new Point(\n                            pos[cur].x + edge.dx,\n                            pos[cur].y + edge.dy\n                    );\n\n                    queue.offer(next);\n                }\n            }\n        }\n\n        int minX = Integer.MAX_VALUE;\n        int minY = Integer.MAX_VALUE;\n\n        for (int i = 1; i <= total; i++) {\n            minX = Math.min(minX, pos[i].x);\n            minY = Math.min(minY, pos[i].y);\n        }\n\n        int[][] ans = new int[m][n];\n\n        for (int i = 1; i <= total; i++) {\n            // x 是列坐标，所以对应 col\n            int col = pos[i].x - minX;\n\n            // y 是行坐标，所以对应 row\n            int row = pos[i].y - minY;\n\n            ans[row][col] = i;\n        }\n\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (j > 0) {\n                    System.out.print(\" \");\n                }\n                System.out.print(ans[i][j]);\n            }\n            System.out.println();\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "COMPILE_ERROR",
+      "passedCount": 0,
+      "totalCount": 1,
+      "timeUsedMs": 625,
+      "memoryUsedMb": null,
+      "errorMessage": "Main.java:29: ����: �Ҳ�������\r\n        List<Edge>[] graph = new ArrayList[total + 1];\r\n                                           ^\r\n  ����:   ���� total\r\n  λ��: �� Main\r\nMain.java:32: ����: �Ҳ�������\r\n        for (int i = 1; i <= total; i++) {\r\n                             ^\r\n  ����:   ���� total\r\n  λ��: �� Main\r\nMain.java:36: ����: �Ҳ�������\r\n        for (int i = 0; i < k; i++) {\r\n                            ^\r\n  ����:   ���� k\r\n  λ��: �� Main\r\nMain.java:70: ����: �Ҳ�������\r\n        Point[] pos = new Point[total + 1];\r\n                                ^\r\n  ����:   ���� total\r\n  λ��: �� Main\r\nMain.java:73: ����: �Ҳ�������\r\n        boolean[] visited = new boolean[total + 1];\r\n                                        ^\r\n  ����:   ���� total\r\n  λ��: �� Main\r\nMain.java:112: ����: �Ҳ�������\r\n        for (int i = 1; i <= total; i++) {\r\n                             ^\r\n  ����:   ���� total\r\n  λ��: �� Main\r\nMain.java:117: ����: �Ҳ�������\r\n        int[][] ans = new int[m][n];\r\n                              ^\r\n  ����:   ���� m\r\n  λ��: �� Main\r\nMain.java:117: ����: �Ҳ�������\r\n        int[][] ans = new int[m][n];\r\n                                 ^\r\n  ����:   ���� n\r\n  λ��: �� Main\r\nMain.java:119: ����: �Ҳ�������\r\n        for (int i = 1; i <= total; i++) {\r\n                             ^\r\n  ����:   ���� total\r\n  λ��: �� Main\r\nMain.java:129: ����: �Ҳ�������\r\n        for (int i = 0; i < m; i++) {\r\n                            ^\r\n  ����:   ���� m\r\n  λ��: �� Main\r\nMain.java:130: ����: �Ҳ�������\r\n            for (int j = 0; j < n; j++) {\r\n                                ^\r\n  ����:   ���� n\r\n  λ��: �� Main\r\nע: Main.javaʹ����δ�����򲻰�ȫ�Ĳ�����\r\nע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣\r\n11 ������\r\n",
+      "caseResults": [],
+      "createdAt": "2026-04-27T13:14:52.618Z",
+      "updatedAt": "2026-04-27T13:14:52.618Z"
+    },
+    {
+      "id": "8f1ec042-6020-424b-bb89-cccd571abb11",
+      "problemId": "a93e0686-076e-4b69-973c-6fbf4f087791",
+      "code": "import java.util.*;\n\npublic class Main {\n\n    /**\n     * Edge 表示图中的一条边\n     *\n     * 例如：\n     * 如果有关系：a 在 b 的右边\n     * 那么从 b 可以走到 a，移动方向是：\n     * dx = 1, dy = 0\n     *\n     * to：当前拼图块相邻的拼图块编号\n     * dx：列方向偏移量，向右为 +1，向左为 -1\n     * dy：行方向偏移量，向下为 +1，向上为 -1\n     */\n    static class Edge {\n        int to;\n        int dx;\n        int dy;\n\n        Edge(int to, int dx, int dy) {\n            this.to = to;\n            this.dx = dx;\n            this.dy = dy;\n        }\n    }\n\n    /**\n     * Point 表示某个拼图块的坐标\n     *\n     * 注意：\n     * x 表示列坐标，向右增加\n     * y 表示行坐标，向下增加\n     *\n     * 所以最后放入二维数组时：\n     * row = y\n     * col = x\n     */\n    static class Point {\n        int x;\n        int y;\n\n        Point(int x, int y) {\n            this.x = x;\n            this.y = y;\n        }\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // m 行，n 列\n        int m = sc.nextInt();\n        int n = sc.nextInt();\n\n        // 拼图总数\n        int total = m * n;\n\n        // 相对位置关系数量\n        int k = sc.nextInt();\n\n        /**\n         * graph[i] 存储与第 i 块拼图相邻的拼图块\n         *\n         * 因为拼图块编号是 1 到 total，\n         * 所以数组大小开 total + 1，方便直接用编号作为下标。\n         */\n        List<Edge>[] graph = new ArrayList[total + 1];\n\n        // 初始化每个点的邻接表\n        for (int i = 1; i <= total; i++) {\n            graph[i] = new ArrayList<>();\n        }\n\n        /**\n         * 读取 k 条相对位置关系\n         *\n         * 输入格式：\n         * a b dir\n         *\n         * 含义：\n         * a 在 b 的 dir 方向\n         *\n         * 例如：\n         * 4 3 U\n         * 表示 4 在 3 的上方\n         */\n        for (int i = 0; i < k; i++) {\n            int a = sc.nextInt();\n            int b = sc.nextInt();\n            String dir = sc.next();\n\n            /**\n             * dx、dy 表示：\n             * 从 b 走到 a 时，坐标应该怎么变化\n             *\n             * 坐标规则：\n             * x 表示列，向右增加\n             * y 表示行，向下增加\n             */\n            int dx = 0, dy = 0;\n\n            if (dir.equals(\"U\")) {\n                // a 在 b 上方\n                // 从 b 到 a：行数减少 1\n                dx = 0;\n                dy = -1;\n            } else if (dir.equals(\"B\")) {\n                // a 在 b 下方\n                // 从 b 到 a：行数增加 1\n                dx = 0;\n                dy = 1;\n            } else if (dir.equals(\"L\")) {\n                // a 在 b 左方\n                // 从 b 到 a：列数减少 1\n                dx = -1;\n                dy = 0;\n            } else if (dir.equals(\"R\")) {\n                // a 在 b 右方\n                // 从 b 到 a：列数增加 1\n                dx = 1;\n                dy = 0;\n            }\n\n            /**\n             * 建图：\n             *\n             * 已知 a 在 b 的 dir 方向，\n             * 所以从 b 可以走到 a，偏移量是 dx、dy。\n             */\n            graph[b].add(new Edge(a, dx, dy));\n\n            /**\n             * 同时还要加入反向边。\n             *\n             * 如果从 b 到 a 的偏移是 dx、dy，\n             * 那么从 a 到 b 的偏移就是 -dx、-dy。\n             *\n             * 这样 BFS 时无论从哪个拼图块开始，\n             * 都可以沿着关系推导出其它拼图块的位置。\n             */\n            graph[a].add(new Edge(b, -dx, -dy));\n        }\n\n        /**\n         * pos[i] 表示第 i 块拼图的坐标\n         *\n         * 因为一开始我们不知道真实绝对坐标，\n         * 所以先假设某一块拼图的位置是 (0, 0)，\n         * 然后通过相对关系推出其它拼图块的相对坐标。\n         */\n        Point[] pos = new Point[total + 1];\n\n        // visited[i] 表示第 i 块拼图是否已经计算过坐标\n        boolean[] visited = new boolean[total + 1];\n\n        Queue<Integer> queue = new LinkedList<>();\n\n        /**\n         * 从 1 号拼图块开始 BFS。\n         *\n         * 题目保证所有拼图能组成一个完整矩形，\n         * 并且关系足够还原所有位置，\n         * 所以从任意一块开始都可以。\n         *\n         * 这里把 1 号块的坐标暂时设为 (0, 0)。\n         */\n        visited[1] = true;\n        pos[1] = new Point(0, 0);\n        queue.offer(1);\n\n        /**\n         * BFS 推导所有拼图块的相对坐标\n         */\n        while (!queue.isEmpty()) {\n            int cur = queue.poll();\n\n            // 遍历当前拼图块的所有相邻拼图块\n            for (Edge edge : graph[cur]) {\n                int next = edge.to;\n\n                // 如果 next 还没有计算过坐标，就根据 cur 的坐标推导出来\n                if (!visited[next]) {\n                    visited[next] = true;\n\n                    /**\n                     * next 的坐标 =\n                     * 当前块 cur 的坐标 + 从 cur 到 next 的偏移量\n                     */\n                    pos[next] = new Point(\n                            pos[cur].x + edge.dx,\n                            pos[cur].y + edge.dy\n                    );\n\n                    queue.offer(next);\n                }\n            }\n        }\n\n        /**\n         * BFS 得到的坐标可能包含负数。\n         *\n         * 例如：\n         * 如果 1 号块在中间，\n         * 它左边和上边的拼图块坐标就可能是负数。\n         *\n         * 但是二维数组下标不能是负数，\n         * 所以要找到最小的 x 和 y，\n         * 然后把所有坐标整体平移成非负数。\n         */\n        int minX = Integer.MAX_VALUE;\n        int minY = Integer.MAX_VALUE;\n\n        for (int i = 1; i <= total; i++) {\n            minX = Math.min(minX, pos[i].x);\n            minY = Math.min(minY, pos[i].y);\n        }\n\n        /**\n         * ans[row][col] 表示最终拼图矩阵\n         *\n         * m 行 n 列：\n         * row 范围是 0 到 m - 1\n         * col 范围是 0 到 n - 1\n         */\n        int[][] ans = new int[m][n];\n\n        /**\n         * 将每个拼图块放入最终矩阵中\n         */\n        for (int i = 1; i <= total; i++) {\n            // x 是列坐标，所以对应 col\n            int col = pos[i].x - minX;\n\n            // y 是行坐标，所以对应 row\n            int row = pos[i].y - minY;\n\n            ans[row][col] = i;\n        }\n\n        /**\n         * 按从上到下、从左到右输出完整拼图矩阵\n         */\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (j > 0) {\n                    System.out.print(\" \");\n                }\n                System.out.print(ans[i][j]);\n            }\n            System.out.println();\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 107,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 107,
+          "message": "",
+          "input": "2 2\n4\n4 3 U\n1 4 R\n4 1 L\n3 2 L",
+          "expectedOutput": "4 1\n3 2",
+          "actualOutput": "4 1\r\n3 2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T13:15:27.430Z",
+      "updatedAt": "2026-04-27T13:15:27.430Z"
+    },
+    {
+      "id": "2173e301-d43e-43b8-95ee-ea78a1d2a3c3",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "WRONG_ANSWER",
+      "passedCount": 0,
+      "totalCount": 1,
+      "timeUsedMs": 123,
+      "memoryUsedMb": null,
+      "errorMessage": "答案错误",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "WRONG_ANSWER",
+          "timeUsedMs": 123,
+          "message": "答案错误",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "3",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T13:51:12.511Z",
+      "updatedAt": "2026-04-27T13:51:12.511Z"
+    },
+    {
+      "id": "e8200ba4-6e6f-436e-b5f3-80c717e0324c",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 122,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 122,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T13:52:29.594Z",
+      "updatedAt": "2026-04-27T13:52:29.594Z"
+    },
+    {
+      "id": "a2772bb0-ee5d-41d7-ad70-686df8da4a64",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 155,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 155,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-27T13:52:41.192Z",
+      "updatedAt": "2026-04-27T13:52:41.192Z"
+    },
+    {
+      "id": "ec152f3a-bd78-4ead-91c7-b1365aeef4ec",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 212,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 212,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-29T07:12:47.169Z",
+      "updatedAt": "2026-04-29T07:12:47.169Z"
+    },
+    {
+      "id": "697d9841-932c-453c-8e10-0a8f4090b7ea",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 128,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 128,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-29T07:44:30.020Z",
+      "updatedAt": "2026-04-29T07:44:30.020Z"
+    },
+    {
+      "id": "ae7ef295-262c-4a90-8880-59cb3630f18d",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 115,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 115,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-29T07:44:41.359Z",
+      "updatedAt": "2026-04-29T07:44:41.359Z"
+    },
+    {
+      "id": "9822eb54-01e2-4734-b9eb-1901f0daaee1",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "SUBMIT",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 146,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 146,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-29T07:45:58.057Z",
+      "updatedAt": "2026-04-29T07:45:58.057Z"
+    },
+    {
+      "id": "3c6b3fcd-36be-498e-989e-544a3479d39a",
+      "problemId": "484b4847-48f6-4ae8-ba4e-a374c7faccff",
+      "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        // 1. 输入内容数量 n，推荐位m\n        int n = sc.nextInt();\n        int m = sc.nextInt();\n        List<Content> contents = new ArrayList<>();\n\n        // 2. 输入 n 条内容的热度区间 [li, ri]\n        for (int i = 0; i < n; i++) {\n            int l = sc.nextInt();\n            int r = sc.nextInt();\n            contents.add(new Content(l, r));\n        }\n\n        // 4. 输入 m 个推荐位热度\n        List<Integer> slots = new ArrayList<>();\n        for (int i = 0; i < m; i++) {\n            slots.add(sc.nextInt());\n        }\n\n        // 4. 排序：核心步骤\n        // 内容按 右边界ri 升序排序（优先满足要求严格的内容）\n        Collections.sort(contents, Comparator.comparingInt(c -> c.r));\n        // 推荐位按 热度 升序排序\n        Collections.sort(slots);\n\n        boolean[] usedContent = new boolean[n]; // 标记内容是否被使用\n        int count = 0; // 最大匹配数\n\n        // 5. 贪心匹配：每个推荐位找第一个可用的内容\n        for (int s : slots) {\n            for (int i = 0; i < n; i++) {\n                Content c = contents.get(i);\n                // 内容未使用 + 热度在区间内 → 匹配成功\n                if (!usedContent[i] && s >= c.l && s <= c.r) {\n                    usedContent[i] = true;\n                    count++;\n                    break; // 一个推荐位只配一个内容\n                }\n            }\n        }\n\n        // 输出结果\n        System.out.println(count);\n        sc.close();\n    }\n\n    // 内容实体类：存储热度区间 [l, r]\n    static class Content {\n        int l, r;\n        public Content(int l, int r) {\n            this.l = l;\n            this.r = r;\n        }\n    }\n}",
+      "language": "JAVA",
+      "mode": "RUN_SAMPLE",
+      "status": "ACCEPTED",
+      "passedCount": 1,
+      "totalCount": 1,
+      "timeUsedMs": 136,
+      "memoryUsedMb": null,
+      "errorMessage": "",
+      "caseResults": [
+        {
+          "index": 1,
+          "isSample": true,
+          "status": "ACCEPTED",
+          "timeUsedMs": 136,
+          "message": "",
+          "input": "3 3\n1 3\n2 5\n4 6\n2 4 7",
+          "expectedOutput": "2",
+          "actualOutput": "2\r\n"
+        }
+      ],
+      "createdAt": "2026-04-29T07:47:03.979Z",
+      "updatedAt": "2026-04-29T07:47:03.979Z"
+    }
+  ]
 }

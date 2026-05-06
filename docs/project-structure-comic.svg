@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">Spring Boot 项目结构理解图</title>
+  <desc id="desc">一个漫画风格的在线编程练习网站项目结构图，展示浏览器、Controller、Service、JudgeService 与数据文件之间的请求流和数据流。</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fffaf1"/>
+      <stop offset="100%" stop-color="#fff3db"/>
+    </linearGradient>
+    <linearGradient id="panelBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff6ff"/>
+      <stop offset="100%" stop-color="#b9e7ff"/>
+    </linearGradient>
+    <linearGradient id="panelYellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff2bd"/>
+      <stop offset="100%" stop-color="#ffd86b"/>
+    </linearGradient>
+    <linearGradient id="panelPurple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0e3ff"/>
+      <stop offset="100%" stop-color="#cfb6ff"/>
+    </linearGradient>
+    <linearGradient id="panelGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e5ffe8"/>
+      <stop offset="100%" stop-color="#b8f0c1"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e53935"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1b8f4b"/>
+    </marker>
+    <style>
+      .title { font: 900 46px/1.1 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f1a10; }
+      .subtitle { font: 700 22px/1.2 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #3f2f18; }
+      .panelHead { font: 900 24px/1.2 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f1a10; }
+      .panelBody { font: 600 16px/1.4 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #2d2d2d; }
+      .small { font: 700 14px/1.3 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #2d2d2d; }
+      .bubble { fill: #fffdf8; stroke: #111; stroke-width: 3; }
+      .panel { stroke: #111; stroke-width: 4; rx: 22; ry: 22; filter: url(#shadow); }
+      .outline { stroke: #111; stroke-width: 4; }
+      .comicLine { stroke: #111; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="980" fill="url(#bg)"/>
+
+  <text x="52" y="74" class="title">Spring Boot 项目结构揭秘</text>
+  <text x="56" y="118" class="subtitle">在线编程练习网站 · 从浏览器请求到判题结果返回的完整链路</text>
+
+  <g transform="translate(1020,20)">
+    <rect x="0" y="0" width="520" height="118" rx="22" ry="22" fill="#fffefc" class="outline" filter="url(#shadow)"/>
+    <text x="24" y="36" class="panelHead">流向说明</text>
+    <line x1="28" y1="58" x2="150" y2="58" stroke="#e53935" stroke-width="8" marker-end="url(#arrowRed)"/>
+    <text x="168" y="53" class="small">请求流：前端 → 后端</text>
+    <line x1="28" y1="90" x2="150" y2="90" stroke="#1b8f4b" stroke-width="8" marker-end="url(#arrowGreen)"/>
+    <text x="168" y="85" class="small">数据流：后端 → 前端</text>
+  </g>
+
+  <g transform="translate(42,170)">
+    <rect class="panel" x="0" y="0" width="288" height="620" fill="url(#panelYellow)"/>
+    <rect x="0" y="0" width="288" height="92" fill="#ffbe3d" rx="22" ry="22" class="outline"/>
+    <text x="20" y="38" class="panelHead">1  浏览器 / 前端页面</text>
+    <text x="20" y="65" class="small">(HTML / CSS / JS)</text>
+    <rect x="26" y="114" width="236" height="160" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <rect x="44" y="134" width="200" height="120" rx="10" ry="10" fill="#dff1ff" class="outline"/>
+    <rect x="60" y="150" width="168" height="14" fill="#fff" opacity="0.9"/>
+    <rect x="60" y="172" width="120" height="14" fill="#fff" opacity="0.9"/>
+    <rect x="60" y="194" width="150" height="14" fill="#fff" opacity="0.9"/>
+    <rect x="60" y="216" width="84" height="14" fill="#fff" opacity="0.9"/>
+    <rect x="182" y="194" width="56" height="30" rx="8" fill="#30b36b"/>
+    <text x="188" y="214" class="small" fill="#fff">提交</text>
+    <text x="28" y="316" class="panelBody">用户在浏览器里查看题目、</text>
+    <text x="28" y="342" class="panelBody">编写代码、点击运行 / 提交。</text>
+    <text x="28" y="386" class="panelBody">前端负责：</text>
+    <text x="28" y="414" class="panelBody">- 题目列表</text>
+    <text x="28" y="440" class="panelBody">- 题目详情</text>
+    <text x="28" y="466" class="panelBody">- 代码编辑器</text>
+    <text x="28" y="492" class="panelBody">- 判题结果展示</text>
+    <text x="28" y="552" class="panelBody">对应文件：public/</text>
+  </g>
+
+  <g transform="translate(360,170)">
+    <rect class="panel" x="0" y="0" width="288" height="620" fill="url(#panelBlue)"/>
+    <rect x="0" y="0" width="288" height="92" fill="#56d3e6" rx="22" ry="22" class="outline"/>
+    <text x="20" y="38" class="panelHead">2  Controller 接口层</text>
+    <text x="20" y="65" class="small">/api/*</text>
+    <rect x="26" y="114" width="236" height="170" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="46" y="144" class="small">这里负责：</text>
+    <text x="46" y="172" class="panelBody">- 接收请求</text>
+    <text x="46" y="198" class="panelBody">- 校验参数</text>
+    <text x="46" y="224" class="panelBody">- 调用 Service</text>
+    <text x="46" y="250" class="panelBody">- 返回 JSON</text>
+    <rect x="38" y="326" width="212" height="170" rx="18" ry="18" fill="#1b1b1b" class="outline"/>
+    <text x="54" y="356" class="small" fill="#f1f1f1">@RestController</text>
+    <text x="54" y="382" class="small" fill="#f1f1f1">@RequestMapping("/api")</text>
+    <text x="54" y="412" class="small" fill="#f1f1f1">public class CodingWebController</text>
+    <text x="54" y="442" class="small" fill="#f1f1f1">{</text>
+    <text x="54" y="468" class="small" fill="#f1f1f1">  ...</text>
+    <text x="28" y="556" class="panelBody">对应文件：</text>
+    <text x="28" y="584" class="panelBody">controller/CodingWebController.java</text>
+  </g>
+
+  <g transform="translate(678,170)">
+    <rect class="panel" x="0" y="0" width="288" height="620" fill="url(#panelGreen)"/>
+    <rect x="0" y="0" width="288" height="92" fill="#7dde97" rx="22" ry="22" class="outline"/>
+    <text x="20" y="38" class="panelHead">3  Service 业务层</text>
+    <text x="20" y="65" class="small">题目管理 / 提交记录</text>
+    <rect x="26" y="114" width="236" height="166" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="46" y="146" class="panelBody">核心职责：</text>
+    <text x="46" y="174" class="panelBody">- 读取 / 写入 db.json</text>
+    <text x="46" y="200" class="panelBody">- 新建 / 修改 / 删除题目</text>
+    <text x="46" y="226" class="panelBody">- 恢复示例题</text>
+    <text x="46" y="252" class="panelBody">- 组装提交结果</text>
+    <rect x="26" y="316" width="236" height="184" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="46" y="348" class="panelBody">你可以把它理解成：</text>
+    <text x="46" y="376" class="panelBody">Controller 只负责接电话，</text>
+    <text x="46" y="402" class="panelBody">Service 才是真正做事情的人。</text>
+    <text x="46" y="458" class="panelBody">对应文件：</text>
+    <text x="46" y="486" class="panelBody">service/CodingWebService.java</text>
+    <text x="28" y="556" class="panelBody">还会调用 JudgeService。</text>
+  </g>
+
+  <g transform="translate(996,170)">
+    <rect class="panel" x="0" y="0" width="288" height="620" fill="#fff1b8"/>
+    <rect x="0" y="0" width="288" height="92" fill="#ffd34d" rx="22" ry="22" class="outline"/>
+    <text x="20" y="38" class="panelHead">4  JudgeService 判题层</text>
+    <text x="20" y="65" class="small">javac / java / timeout / compare</text>
+    <rect x="26" y="114" width="236" height="120" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="46" y="146" class="panelBody">判题流程：</text>
+    <text x="46" y="174" class="panelBody">1. 安全检查</text>
+    <text x="46" y="198" class="panelBody">2. 编译 Main.java</text>
+    <text x="46" y="222" class="panelBody">3. 运行测试用例</text>
+    <rect x="26" y="256" width="236" height="120" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="46" y="288" class="panelBody">4. 对比输出</text>
+    <text x="46" y="316" class="panelBody">5. 生成 AC / WA / TLE / RE</text>
+    <text x="46" y="344" class="panelBody">6. 清理临时目录</text>
+    <rect x="26" y="398" width="236" height="128" rx="18" ry="18" fill="#1b1b1b" class="outline"/>
+    <text x="48" y="430" class="small" fill="#f1f1f1">判断标准：</text>
+    <text x="48" y="458" class="small" fill="#f1f1f1">输出一致才算通过</text>
+    <text x="48" y="484" class="small" fill="#f1f1f1">超时 / 输出爆炸会被拦截</text>
+    <text x="28" y="558" class="panelBody">对应文件：</text>
+    <text x="28" y="586" class="panelBody">service/JudgeService.java</text>
+  </g>
+
+  <g transform="translate(1314,170)">
+    <rect class="panel" x="0" y="0" width="244" height="620" fill="url(#panelPurple)"/>
+    <rect x="0" y="0" width="244" height="92" fill="#b68cff" rx="22" ry="22" class="outline"/>
+    <text x="16" y="38" class="panelHead">5  数据与文件层</text>
+    <text x="16" y="65" class="small">data/db.json / tmp/server.json / public/</text>
+    <rect x="18" y="116" width="208" height="136" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="38" y="150" class="panelBody">data/db.json</text>
+    <text x="38" y="178" class="panelBody">- 题目</text>
+    <text x="38" y="204" class="panelBody">- 测试用例</text>
+    <text x="38" y="230" class="panelBody">- 提交记录</text>
+    <rect x="18" y="272" width="208" height="136" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="38" y="306" class="panelBody">tmp/server.json</text>
+    <text x="38" y="334" class="panelBody">- 当前端口</text>
+    <text x="38" y="360" class="panelBody">- 进程信息</text>
+    <rect x="18" y="428" width="208" height="136" rx="18" ry="18" fill="#fffdf8" class="outline"/>
+    <text x="38" y="462" class="panelBody">public/</text>
+    <text x="38" y="490" class="panelBody">- HTML / CSS / JS</text>
+    <text x="38" y="516" class="panelBody">- 静态页面资源</text>
+    <text x="16" y="592" class="panelBody">这个层负责“存”和“取”。</text>
+  </g>
+
+  <g transform="translate(82,812)">
+    <path class="comicLine" d="M 0 60 C 180 12, 340 12, 520 60"/>
+    <path class="comicLine" d="M 546 60 C 726 12, 886 12, 1066 60"/>
+    <path class="comicLine" d="M 1092 60 C 1272 12, 1432 12, 1590 60"/>
+    <text x="22" y="26" class="panelHead">整体链路</text>
+    <text x="22" y="52" class="small">浏览器 → Controller → Service → JudgeService → 文件 / 数据</text>
+  </g>
+
+  <g transform="translate(306,388)">
+    <line x1="0" y1="0" x2="44" y2="0" stroke="#e53935" stroke-width="10" marker-end="url(#arrowRed)"/>
+    <text x="6" y="-18" class="small">请求</text>
+  </g>
+  <g transform="translate(624,388)">
+    <line x1="0" y1="0" x2="44" y2="0" stroke="#e53935" stroke-width="10" marker-end="url(#arrowRed)"/>
+    <text x="6" y="-18" class="small">调用 Service</text>
+  </g>
+  <g transform="translate(942,388)">
+    <line x1="0" y1="0" x2="44" y2="0" stroke="#e53935" stroke-width="10" marker-end="url(#arrowRed)"/>
+    <text x="6" y="-18" class="small">调用 Judge</text>
+  </g>
+  <g transform="translate(1260,388)">
+    <line x1="0" y1="0" x2="44" y2="0" stroke="#e53935" stroke-width="10" marker-end="url(#arrowRed)"/>
+    <text x="6" y="-18" class="small">读写文件</text>
+  </g>
+
+  <g transform="translate(148,736)">
+    <line x1="0" y1="0" x2="1220" y2="0" stroke="#1b8f4b" stroke-width="8" marker-end="url(#arrowGreen)"/>
+    <text x="500" y="-14" class="small">返回 JSON / 页面渲染结果 / 判题状态</text>
+  </g>
+
+  <rect x="50" y="920" width="1500" height="36" rx="16" ry="16" fill="#fffdf8" class="outline"/>
+  <text x="70" y="944" class="small">技术栈：Spring Boot + Java + JSON + 前端静态页面 + 本地判题（javac/java）</text>
+</svg>
